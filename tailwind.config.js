@@ -28,11 +28,12 @@ export default {
         "desktop-cabbages-2": "url('/background/desktop-cabbages-2.png')",
       },
       backgroundSize: {
+        "175%": "175%",
         "100%": "100%",
       },
       backgroundPosition: {
-        "top-4": "center top 28px",
-        "top-8": "center top 155px",
+        "top-4": "left top 28px",
+        "top-8": "left top 155px",
       },
     },
   },
