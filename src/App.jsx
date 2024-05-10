@@ -1,33 +1,25 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./index.css";
+import Header from "./components/Header/Header";
+import Logo from "./components/Logo/Logo";
+import LoginForm from "./components/LoginForm/LoginForm";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header />
+
+      <section className="bg-gray-light rounded-bl-[110px] w-full h-[526px] lg:bg-desktop-cabbages bg-top-4 bg-no-repeat bg-100%">
+        <div className="container mx-auto">
+          <div className="flex items-center justify-end pr-24 w-full gap-40 pt-[117px]">
+            <Logo />
+            <LoginForm />
+          </div>
+
+          <div className="pb-10">
+            <div className="lg:bg-desktop-cabbages-2 bg-no-repeat bg-top ml-56 -mt-16 bg-100% h-[142px] w-[183px]"></div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
