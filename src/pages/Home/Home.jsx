@@ -1,41 +1,43 @@
-import Header from "../../components/Header/Header";
-import Logo from "../../components/Logo/Logo";
-import LoginForm from "../../components/LoginForm/LoginForm";
-import cabbage from "../../assets/cabbage.svg";
-import cabbage2 from "../../assets/cabbage-2.svg";
+import Balance from "../../components/Balance";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <>
-      <Header />
+    <div>
+      <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
+        <div className="container mx-auto flex justify-between pt-10 items-center">
+          <Balance />
 
-      <section className="bg-gray-light rounded-bl-[110px] w-full h-72 md:h-[526px] md:bg-desktop-cabbages bg-top-4 bg-no-repeat md:bg-175% lg:bg-100%">
-        <div className="container mx-auto">
-          <div className="flex justify-center lg:justify-end relative">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-end px-5 lg:pr-24  gap-[50px] md:gap-20 lg:gap-40 pt-[86px] md:pt-20 lg:pt-[117px]">
-              <Logo />
-              <LoginForm />
-            </div>
+          <div className="flex gap-4">
+            <Link
+              to="/reports"
+              className="text-gray-darkest/70 hover:text-orange transition duration-200 ease-in-out"
+            >
+              Reports
+            </Link>
+
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-6 h-6"
+            >
+              <g clipPath="url(#clip0_19402_517)">
+                <path
+                  d="M5 9.2H8V19H5V9.2ZM10.6 5H13.4V19H10.6V5ZM16.2 13H19V19H16.2V13Z"
+                  fill="#52555F"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_19402_517">
+                  <rect width="24" height="24" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
           </div>
-
-          <div className="md:pb-10">
-            <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:bg-top md:ml-24 lg:ml-56 md:-mt-10 lg:-mt-16 md:bg-100% md:h-[142px] md:w-[183px]"></div>
-          </div>
-
-          <img
-            src={cabbage2}
-            alt="Cabbage"
-            className="absolute top-32 -right-4 w-20 h-24 ml-9 m-4 md:hidden"
-          />
-
-          <img
-            src={cabbage}
-            alt="Cabbage"
-            className="w-20 h-24 ml-9 m-4 md:hidden"
-          />
         </div>
-      </section>
-    </>
+      </div>
+    </div>
   );
 };
 
