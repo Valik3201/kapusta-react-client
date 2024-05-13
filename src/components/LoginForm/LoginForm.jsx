@@ -38,7 +38,6 @@ const InputWithValidation = ({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const { error } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
