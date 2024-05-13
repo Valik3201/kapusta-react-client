@@ -1,27 +1,29 @@
-import axios from 'axios';
-import { createAsyncThunk } from '@reduxjs/toolkit';
-import Notiflix from 'notiflix';
-import { notifySettings } from '../../utils/notifySettings';
+import axios from "axios";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import Notiflix from "notiflix";
+
 export const instance = axios.create({
-  baseURL: 'https://kapusta-backend.goit.global',
+  baseURL: "https://kapusta-backend.goit.global",
 });
-const setToken = token => {
+
+const setToken = (token) => {
   if (token) {
     return (instance.defaults.headers.common.Authorization = `Bearer ${token}`);
   }
-  instance.defaults.headers.common.Authorization = '';
+  instance.defaults.headers.common.Authorization = "";
 };
+
 instance.interceptors.response.use(
-  response => response,
-  async error => {
+  (response) => response,
+  async (error) => {
     if (error.response.status === 401) {
       const refreshToken = JSON.parse(
-        localStorage.getItem('persist:root')
+        localStorage.getItem("persist:root")
       ).refreshToken;
-      const sid = JSON.parse(localStorage.getItem('persist:root')).sid;
+      const sid = JSON.parse(localStorage.getItem("persist:root")).sid;
       try {
         setToken(refreshToken);
-        const { data } = await instance.post('/auth/refresh', { sid });
+        const { data } = await instance.post("/auth/refresh", { sid });
         setToken(data.accessToken);
         return instance(error.config);
       } catch (error) {
@@ -33,13 +35,13 @@ instance.interceptors.response.use(
   }
 );
 export const fetchCurrentUser = createAsyncThunk(
-  'auth/info',
+  "auth/info",
   async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState();
       const accessToken = state.auth.token;
       setToken(accessToken);
-      const { data } = await instance.get('/user');
+      const { data } = await instance.get("/user");
       return data;
     } catch ({ response }) {
       const { status, data } = response;
@@ -50,27 +52,27 @@ export const fetchCurrentUser = createAsyncThunk(
       console.log(error.message);
       const state = getState();
       const { lang } = state.language.lang;
-      lang === 'en'
-        Notiflix.Notify.failure(`Please login again!`, notifySettings); 
+      lang === "en";
+      Notiflix.Notify.failure(`Please login again!`, notifySettings);
       return rejectWithValue(error);
     }
   }
 );
 export const registerUser = createAsyncThunk(
-  'auth/register',
+  "auth/register",
   async (userData, thunkAPI) => {
     try {
-      const { data } = await instance.post('/auth/register', userData);
+      const { data } = await instance.post("/auth/register", userData);
       if (data) {
         const state = thunkAPI.getState();
         const { lang } = state.language.lang;
-        lang === 'en'
-          Notiflix.Notify.success(
-            'Account was successfully created!',
-            notifySettings
-          );
+        lang === "en";
+        Notiflix.Notify.success(
+          "Account was successfully created!",
+          notifySettings
+        );
         try {
-          const results = await instance.post('/auth/login', userData);
+          const results = await instance.post("/auth/login", userData);
           setToken(results.data.accessToken);
           return results.data;
         } catch (error) {
@@ -81,71 +83,72 @@ export const registerUser = createAsyncThunk(
       const state = thunkAPI.getState();
       const { lang } = state.language.lang;
       if (error.request.status === 409) {
-        lang === 'en'
-          Notiflix.Notify.warning(
-            `User with this email already exists`,
-            notifySettings
-            );
+        lang === "en";
+        Notiflix.Notify.warning(
+          `User with this email already exists`,
+          notifySettings
+        );
         return thunkAPI.rejectWithValue(error.request.status);
       }
-      lang === 'en'
-        Notiflix.Notify.failure(`${error.message}`, notifySettings)
+      lang === "en";
+      Notiflix.Notify.failure(`${error.message}`, notifySettings);
       return thunkAPI.rejectWithValue(error.request.status);
     }
   }
 );
 export const loginUser = createAsyncThunk(
-  'auth/login',
+  "auth/login",
   async (userData, thunkAPI) => {
     try {
-      const { data } = await instance.post('/auth/login', userData);
+      const { data } = await instance.post("/auth/login", userData);
       setToken(data.accessToken);
       const state = thunkAPI.getState();
       const { lang } = state.language.lang;
-      lang === 'en'
-        Notiflix.Notify.success(
-            `Welcome back, ${data.userData.email}!`,
-            notifySettings
-          );
+      lang === "en";
+      Notiflix.Notify.success(
+        `Welcome back, ${data.userData.email}!`,
+        notifySettings
+      );
+      console.log(data);
       return data;
     } catch (error) {
       const state = thunkAPI.getState();
       const { lang } = state.language.lang;
-      lang === 'en'
-        Notiflix.Notify.failure(`${error.message}`, notifySettings)
+      lang === "en";
+      Notiflix.Notify.failure(`${error.message}`, notifySettings);
       return thunkAPI.rejectWithValue(error.request.status);
     }
   }
 );
 export const logoutUser = createAsyncThunk(
-  'auth/logout',
+  "auth/logout",
   async (_, thunkAPI) => {
     try {
       await instance.post(`/auth/logout`);
       const state = thunkAPI.getState();
       const { lang } = state.language.lang;
-      lang === 'en'
-        Notiflix.Notify.info(
-            'Stay safe and see you again &#9996;',
-            notifySettings
-          );
+      lang === "en";
+      Notiflix.Notify.info(
+        "Stay safe and see you again &#9996;",
+        notifySettings
+      );
       setToken(null);
     } catch (error) {
       const state = thunkAPI.getState();
       const { lang } = state.language.lang;
-      lang === 'en'
-        Notiflix.Notify.failure(`${error.message}`, notifySettings)
+      lang === "en";
+      Notiflix.Notify.failure(`${error.message}`, notifySettings);
       return thunkAPI.rejectWithValue(error);
     }
   }
 );
 
 export const googleAuthUser = createAsyncThunk(
-  'auth/google',
-    async ({ accessToken, refreshToken, sid }, { rejectWithValue }) => {
+  "auth/google",
+  async ({ accessToken, refreshToken, sid }, { rejectWithValue }) => {
     setToken(accessToken);
     try {
-      const { data } = await instance.get('/user');
+      const { data } = await instance.get("/user");
       return { accessToken, refreshToken, sid, data };
     } catch ({ response }) {
       const { status, data } = response;

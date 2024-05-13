@@ -1,20 +1,18 @@
-import { createSlice } from '@reduxjs/toolkit';
-import Notiflix from 'notiflix';
-import { notifySettings } from '../../utils/notifySettings';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   registerUser,
   loginUser,
   logoutUser,
   fetchCurrentUser,
   googleAuthUser,
-} from './authOperations';
+} from "./authOperations";
 
-const onPending = state => {
+const onPending = (state) => {
   state.isLoading = true;
 };
 
-export const authSlice = createSlice({
-  name: 'auth',
+const authSlice = createSlice({
+  name: "auth",
   initialState: {
     user: { id: null, email: null },
     token: null,
@@ -24,8 +22,8 @@ export const authSlice = createSlice({
     isLoading: false,
     error: null,
   },
-
-  extraReducers: builder => {
+  reducers: {},
+  extraReducers: (builder) => {
     builder
       .addCase(registerUser.pending, onPending)
       .addCase(registerUser.fulfilled, (state, { payload }) => {
@@ -74,11 +72,6 @@ export const authSlice = createSlice({
         state.error = null;
         state.isLoading = false;
         state.user.email = payload.email;
-
-        Notiflix.Notify.success(
-          `Welcome back, ${state.user.email}!`,
-          notifySettings
-        );
       })
       .addCase(fetchCurrentUser.rejected, (state, { payload }) => {
         state.isLoading = false;
@@ -104,3 +97,7 @@ export const authSlice = createSlice({
       });
   },
 });
+
+const authReducer = authSlice.reducer;
+
+export default authReducer;
