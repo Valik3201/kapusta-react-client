@@ -1,5 +1,8 @@
 import { useState } from "react";
 import googleLogo from "../../assets/google-logo.svg";
+import { useDispatch } from "react-redux";
+import { logIn, register } from "../../redux/auth/operations";
+import { useAuth } from "../../hooks";
 
 const InputWithValidation = ({
   value,
@@ -34,6 +37,9 @@ const InputWithValidation = ({
 };
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
+  const { error } = useAuth();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
@@ -55,13 +61,24 @@ const LoginForm = () => {
     setPasswordTouched(true);
   };
 
-  const handleLogin = () => {
-    console.log("Email:", email);
-    console.log("Password:", password);
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    if (email.trim() === "" || password.trim() === "") {
+      return;
+    }
+
+    dispatch(logIn({ email: email, password: password }));
   };
 
-  const handleRegistration = () => {
-    console.log("Registration logic");
+  const handleRegistration = (e) => {
+    e.preventDefault();
+
+    if (email.trim() === "" || password.trim() === "") {
+      return;
+    }
+
+    dispatch(register({ email: email, password: password }));
   };
 
   const validateEmail = () => {

@@ -10,6 +10,7 @@ export default {
         "gray-darkest": "#52555F",
         "gray-light": "#F5F6FB",
         "gray-light-2": "#F6F7FB",
+        "gray-light-3": "#E0E5EB",
         "gray-lighter": "#DFE2EB",
         gray: "#A6ABB9",
         orange: "#FF751D",
