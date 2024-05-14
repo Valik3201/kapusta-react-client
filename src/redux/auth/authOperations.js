@@ -85,7 +85,7 @@ export const registerUser = createAsyncThunk(
           Notiflix.Notify.warning(
             `User with this email already exists`,
             notifySettings
-            );
+          );
         return thunkAPI.rejectWithValue(error.request.status);
       }
       lang === 'en'
@@ -104,9 +104,9 @@ export const loginUser = createAsyncThunk(
       const { lang } = state.language.lang;
       lang === 'en'
         Notiflix.Notify.success(
-            `Welcome back, ${data.userData.email}!`,
-            notifySettings
-          );
+          `Welcome back, ${data.userData.email}!`,
+          notifySettings
+        );
       return data;
     } catch (error) {
       const state = thunkAPI.getState();
@@ -126,9 +126,9 @@ export const logoutUser = createAsyncThunk(
       const { lang } = state.language.lang;
       lang === 'en'
         Notiflix.Notify.info(
-            'Stay safe and see you again &#9996;',
-            notifySettings
-          );
+          'Stay safe and see you again &#9996;',
+          notifySettings
+        );
       setToken(null);
     } catch (error) {
       const state = thunkAPI.getState();
