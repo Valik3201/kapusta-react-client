@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 
 axios.defaults.baseURL = "https://kapusta-backend.goit.global";
 
@@ -64,9 +65,14 @@ export const logIn = createAsyncThunk(
  */
 export const logOut = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
   try {
-    await axios.post("/auth/logout");
-    // After a successful logout, remove the token from the HTTP header
-    clearAuthHeader();
+    const state = thunkAPI.getState();
+    if (state.auth.isLoggedInWithGoogle) {
+      googleLogout();
+    } else {
+      await axios.post("/auth/logout");
+      // After a successful logout, remove the token from the HTTP header
+      clearAuthHeader();
+    }
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
   }
@@ -99,6 +105,27 @@ export const refreshUser = createAsyncThunk(
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchGoogleUserProfile = createAsyncThunk(
+  "auth/fetchGoogleUserProfile",
+  async (accessToken) => {
+    try {
+      const response = await axios.get(
+        `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            Accept: "application/json",
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      throw error;
     }
   }
 );

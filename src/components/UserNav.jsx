@@ -19,6 +19,9 @@ export const UserMenu = () => {
       {user && (
         <div className="flex items-center gap-3">
           <div className="relative w-8 h-8 w- overflow-hidden bg-gray-light-2 rounded-full">
+            {user && user.picture && (
+              <img src={user.picture} alt="User Avatar" />
+            )}
             <svg
               className="absolute w-10 h-10 text-gray-darkest -left-1"
               fill="currentColor"

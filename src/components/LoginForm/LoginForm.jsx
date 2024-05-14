@@ -1,8 +1,7 @@
 import { useState } from "react";
-import googleLogo from "../../assets/google-logo.svg";
 import { useDispatch } from "react-redux";
 import { logIn, register } from "../../redux/auth/operations";
-import { useAuth } from "../../hooks";
+import GoogleLogin from "../GoogleLogin";
 
 const InputWithValidation = ({
   value,
@@ -93,10 +92,7 @@ const LoginForm = () => {
       <h2 className="text-gray-darkest text-xs text-center">
         You can log in with your Google Account:
       </h2>
-      <button className="block mx-auto bg-gray-light-2 rounded-full shadow-google mt-5 mb-8 px-5 py-3 hover:bg-gray-lighter transition duration-200 ease-in-out">
-        <img src={googleLogo} alt="Google logo" />
-        <span className="sr-only">Google</span>
-      </button>
+      <GoogleLogin />
       <h2 className="text-gray-darkest text-xs mb-5">
         Or log in using an email and password, after registering:
       </h2>

@@ -1,5 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { register, logIn, logOut, refreshUser } from "./operations";
+import {
+  register,
+  logIn,
+  logOut,
+  refreshUser,
+  fetchGoogleUserProfile,
+} from "./operations";
 
 const initialState = {
   user: { email: null, balance: null, id: null },
@@ -7,6 +13,7 @@ const initialState = {
   refreshToken: null,
   sid: null,
   isLoggedIn: false,
+  isLoggedInWithGoogle: false,
   isRefreshing: false,
   error: null,
 };
@@ -58,6 +65,17 @@ const authSlice = createSlice({
       .addCase(refreshUser.rejected, (state) => {
         state.isRefreshing = false;
         state.error = null;
+      })
+      .addCase(fetchGoogleUserProfile.fulfilled, (state, action) => {
+        state.user = action.payload;
+        state.isLoggedInWithGoogle = true;
+        state.isLoggedIn = true;
+        state.isRefreshing = false;
+        state.error = null;
+      })
+      .addCase(fetchGoogleUserProfile.rejected, (state, action) => {
+        state.isRefreshing = false;
+        state.error = action.error.message;
       });
   },
 });
