@@ -15,7 +15,7 @@ import authReducer from "./auth/slice";
 const authPersistConfig = {
   key: "auth",
   storage,
-  whitelist: ["token"],
+  whitelist: ["user", "accessToken", "refreshToken", "sid", "isLoggedIn"],
 };
 
 export const store = configureStore({
