@@ -1,4 +1,4 @@
-import { userInfoAPI } from "services/apiAuth";
+import { userInfoAPI } from "../../services/apiAuth";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
     addIncomeAPI,
@@ -7,7 +7,7 @@ import {
     getExpenseAPI,
     updateBalanceAPI,
     deleteTransactionAPI,
-} from "services/apiTransactions";
+} from "../../services/apiTransactions";
 
 export const addIncome = createAsyncThunk(
     "transactions/addIncome",
