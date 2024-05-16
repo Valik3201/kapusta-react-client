@@ -27,6 +27,19 @@ const App = () => {
   ) : (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<Home />} />
+        <Route path="auth" element={<AuthenticationPage />} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="*" element={<Home />} />
+      </Route>
+    </Routes>
+  );
+
+  /*   return isRefreshing ? (
+    <div>Loading...</div>
+  ) : (
+    <Routes>
+      <Route path="/" element={<Layout />}>
         <Route
           index
           element={<PrivateRoute redirectTo="/auth" component={<Home />} />}
@@ -48,7 +61,7 @@ const App = () => {
         <Route path="*" element={<Home />} />
       </Route>
     </Routes>
-  );
+  ); */
 };
 
 export default App;

@@ -17,6 +17,8 @@ export default {
         peach: "#FFDAC0",
         red: "#E53935",
         green: "#407946",
+        black: "#000000",
+        white: "#FFFFFF",
       },
       boxShadow: {
         form: "0 10px 60px 0 rgba(170, 178, 197, 0.2)",
