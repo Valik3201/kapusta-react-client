@@ -5,8 +5,8 @@ import { Routes, Route } from "react-router-dom";
 import { refreshUser } from "./redux/auth/operations";
 import { useAuth } from "./hooks";
 import Layout from "./components/Layout";
-//import RestrictedRoute from "./components/RestrictedRoute";
-//import PrivateRoute from "./components/PrivateRoute";
+import RestrictedRoute from "./components/RestrictedRoute";
+import PrivateRoute from "./components/PrivateRoute";
 
 const AuthenticationPage = lazy(() =>
   import("./pages/AuthenticationPage/AuthenticationPage")
@@ -23,19 +23,6 @@ const App = () => {
   }, [dispatch]);
 
   return isRefreshing ? (
-    <div>Loading...</div>
-  ) : (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="auth" element={<AuthenticationPage />} />
-        <Route path="reports" element={<Reports />} />
-        <Route path="*" element={<Home />} />
-      </Route>
-    </Routes>
-  );
-
-  /*   return isRefreshing ? (
     <div>Loading...</div>
   ) : (
     <Routes>
@@ -61,7 +48,7 @@ const App = () => {
         <Route path="*" element={<Home />} />
       </Route>
     </Routes>
-  ); */
+  );
 };
 
 export default App;
