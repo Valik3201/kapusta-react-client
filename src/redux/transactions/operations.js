@@ -101,7 +101,7 @@ export const updateUserBalance = createAsyncThunk(
   "user/updateBalance",
   async (newBalance, { rejectWithValue }) => {
     try {
-      const response = await api.patch("/user/balance", { newBalance });
+      const response = await axios.patch("/user/balance", { newBalance });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);

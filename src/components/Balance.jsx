@@ -14,11 +14,11 @@ const Balance = () => {
   }, [balance]);
 
   const handleChange = (e) => {
-    setInputBalance(parseFloat(e.target.value));
+    setInputBalance(e.target.value);
   };
 
   const handleConfirm = () => {
-    dispatch(updateUserBalance());
+    dispatch(updateUserBalance(Number(inputBalance)));
   };
 
   return (
