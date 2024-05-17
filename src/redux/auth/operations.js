@@ -75,52 +75,19 @@ export const logOut = createAsyncThunk("auth/logout", async (_, thunkAPI) => {
 export const refreshUser = createAsyncThunk(
   "auth/refresh",
   async (_, thunkAPI) => {
-    // Reading the token from the state via getState()
     const state = thunkAPI.getState();
     const persistedToken = state.auth.accessToken;
 
     if (persistedToken === null) {
-      // If there is no token, exit without performing any request
       return thunkAPI.rejectWithValue("Unable to fetch user");
     }
 
     try {
-      // If there is a token, add it to the HTTP header and perform the request
       setAuthHeader(persistedToken);
       const res = await axios.get("/user");
       return res.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
-/*
- * GET @ /user
- */
-export const getUserInfo = createAsyncThunk(
-  "user/getUserInfo",
-  async (_, thunkAPI) => {
-    const state = thunkAPI.getState();
-    const token = state.auth.accessToken;
-
-    if (!token) {
-      return thunkAPI.rejectWithValue("No access token available");
-    }
-
-    try {
-      const res = await axios.get("/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return res.data;
-    } catch (error) {
-      if (error.response.status === 401 || error.response.status === 400) {
-        return thunkAPI.rejectWithValue("Unauthorized or invalid token");
-      } else {
-        return thunkAPI.rejectWithValue(error.message);
-      }
     }
   }
 );

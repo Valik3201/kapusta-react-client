@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 const Balance = () => {
@@ -16,12 +17,13 @@ const Balance = () => {
       .catch((error) => console.error("Error fetching the user data:", error));
   }, []);
 
+
   const handleChange = (e) => {
     setInputBalance(e.target.value);
   };
 
   const handleConfirm = () => {
-    setBalance(inputBalance);
+    dispatch(updateUserBalance(Number(inputBalance)));
   };
 
   if (!user) {
