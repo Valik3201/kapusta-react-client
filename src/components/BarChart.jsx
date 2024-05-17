@@ -6,7 +6,6 @@ import { useMediaQuery } from "react-responsive";
 
 const BarChart = ({ data }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
-  console.log(isMobile);
 
   const chartData = {
     labels: data.map((item) => item.label),
@@ -30,7 +29,7 @@ const BarChart = ({ data }) => {
       padding: {
         left: isMobile ? 40 : 20,
         right: isMobile ? 100 : 20,
-        top: isMobile ? 0 : 20,
+        top: isMobile ? 0 : 40,
         bottom: isMobile ? 0 : 20,
       },
     },

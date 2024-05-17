@@ -1,7 +1,9 @@
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import CategoryCard from "./CategoryCard";
 import Alcohol from "./Icons/CategoriesIcons/Alcohol";
 import Products from "./Icons/CategoriesIcons/Products";
-import Entertaiment from "./Icons/CategoriesIcons/Entertaiment";
+import Entertainment from "./Icons/CategoriesIcons/Entertainment";
 import Health from "./Icons/CategoriesIcons/Health";
 import Transport from "./Icons/CategoriesIcons/Transport";
 import Housing from "./Icons/CategoriesIcons/Housing";
@@ -11,7 +13,47 @@ import Education from "./Icons/CategoriesIcons/Education";
 import Hobbies from "./Icons/CategoriesIcons/Hobbies";
 import Communal from "./Icons/CategoriesIcons/Communal";
 
-const Expenses = () => {
+const Expenses = ({ period }) => {
+  const [user, setUser] = useState(null);
+  const [categoryAmounts, setCategoryAmounts] = useState({});
+
+  useEffect(() => {
+    fetch("/src/db/user.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setUser(data);
+        const filteredTransactions = data.transactions.filter((transaction) => {
+          const transactionDate = new Date(transaction.date);
+          const [month, year] = period.split(" ");
+          return (
+            transactionDate.getMonth() + 1 ===
+              new Date(`${month} 1`).getMonth() + 1 &&
+            transactionDate.getFullYear() === parseInt(year)
+          );
+        });
+        const amounts = filteredTransactions.reduce(
+          (acc, { category, amount }) => {
+            if (!acc[category]) {
+              acc[category] = 0;
+            }
+            acc[category] += amount;
+            return acc;
+          },
+          {}
+        );
+        setCategoryAmounts(amounts);
+      })
+      .catch((error) => console.error("Error fetching the user data:", error));
+  }, [period]);
+
+  if (!user) {
+    return (
+      <div className="text-center text-3xl text-gray-darkest p-8">
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <>
       {/* mobile */}
@@ -19,48 +61,52 @@ const Expenses = () => {
         <div className="space-y-4">
           <div className="grid grid-cols-3 gap-x-4 border-b border-gray-light-3 pb-2">
             <CategoryCard
-              amount="5 000.00"
+              amount={(categoryAmounts["Products"] || 0).toFixed(2)}
               Icon={Products}
               category1="Products"
             />
             <CategoryCard
-              amount="3 000.00"
+              amount={(categoryAmounts["Alcohol"] || 0).toFixed(2)}
               Icon={Alcohol}
               category1="Alcohol"
             />
             <CategoryCard
-              amount="2 400.00"
-              Icon={Entertaiment}
-              category1="Entertaiment"
+              amount={(categoryAmounts["Entertainment"] || 0).toFixed(2)}
+              Icon={Entertainment}
+              category1="Entertainment"
             />
           </div>
           <div className="grid grid-cols-3 gap-x-4 border-b border-gray-light-3 pb-2">
-            <CategoryCard amount="1 000.00" Icon={Health} category1="Health" />
             <CategoryCard
-              amount="2 000.00"
+              amount={(categoryAmounts["Health"] || 0).toFixed(2)}
+              Icon={Health}
+              category1="Health"
+            />
+            <CategoryCard
+              amount={(categoryAmounts["Transport"] || 0).toFixed(2)}
               Icon={Transport}
               category1="Transport"
             />
             <CategoryCard
-              amount="3 000.00"
+              amount={(categoryAmounts["Housing"] || 0).toFixed(2)}
               Icon={Housing}
               category1="Housing"
             />
           </div>
           <div className="grid grid-cols-3 gap-x-4 border-b border-gray-light-3 pb-2">
             <CategoryCard
-              amount="5 000.00"
+              amount={(categoryAmounts["Technique"] || 0).toFixed(2)}
               Icon={Technique}
               category1="Technique"
             />
             <CategoryCard
-              amount="5 000.00"
+              amount={(categoryAmounts["Communal"] || 0).toFixed(2)}
               Icon={Communal}
               category1="Communal"
               category2="communications"
             />
             <CategoryCard
-              amount="5 000.00"
+              amount={(categoryAmounts["Hobbies"] || 0).toFixed(2)}
               Icon={Hobbies}
               category1="Sports"
               category2="hobbies"
@@ -68,65 +114,89 @@ const Expenses = () => {
           </div>
           <div className="grid grid-cols-2 border-b border-gray-light-3 pb-2 px-8">
             <CategoryCard
-              amount="5 000.00"
+              amount={(categoryAmounts["Education"] || 0).toFixed(2)}
               Icon={Education}
               category1="Education"
             />
-            <CategoryCard amount="5 000.00" Icon={Other} category1="Other" />
+            <CategoryCard
+              amount={(categoryAmounts["Other"] || 0).toFixed(2)}
+              Icon={Other}
+              category1="Other"
+            />
           </div>
         </div>
       </div>
 
-      {/*   desktop, tablet */}
-      <div className=" hidden sm:block">
+      {/* desktop, tablet */}
+      <div className="hidden sm:block">
         <div className="flex flex-wrap items-start justify-center pb-2 pt-2 gap-5">
           <CategoryCard
-            amount="5 000.00"
+            amount={(categoryAmounts["Products"] || 0).toFixed(2)}
             Icon={Products}
             category1="Products"
           />
-          <CategoryCard amount="3 000.00" Icon={Alcohol} category1="Alcohol" />
           <CategoryCard
-            amount="2 400.00"
-            Icon={Entertaiment}
-            category1="Entertaiment"
+            amount={(categoryAmounts["Alcohol"] || 0).toFixed(2)}
+            Icon={Alcohol}
+            category1="Alcohol"
           />
-          <CategoryCard amount="1 000.00" Icon={Health} category1="Health" />
           <CategoryCard
-            amount="2 000.00"
+            amount={(categoryAmounts["Entertainment"] || 0).toFixed(2)}
+            Icon={Entertainment}
+            category1="Entertainment"
+          />
+          <CategoryCard
+            amount={(categoryAmounts["Health"] || 0).toFixed(2)}
+            Icon={Health}
+            category1="Health"
+          />
+          <CategoryCard
+            amount={(categoryAmounts["Transport"] || 0).toFixed(2)}
             Icon={Transport}
             category1="Transport"
           />
-          <CategoryCard amount="3 000.00" Icon={Housing} category1="Housing" />
+          <CategoryCard
+            amount={(categoryAmounts["Housing"] || 0).toFixed(2)}
+            Icon={Housing}
+            category1="Housing"
+          />
         </div>
         <div className="flex flex-wrap items-start justify-center pb-2 pt-2 gap-5">
           <CategoryCard
-            amount="5 000.00"
+            amount={(categoryAmounts["Technique"] || 0).toFixed(2)}
             Icon={Technique}
             category1="Technique"
           />
           <CategoryCard
-            amount="5 000.00"
+            amount={(categoryAmounts["Communal"] || 0).toFixed(2)}
             Icon={Communal}
-            category1="Communal,"
+            category1="Communal"
             category2="communications"
           />
           <CategoryCard
-            amount="5 000.00"
+            amount={(categoryAmounts["Hobbies"] || 0).toFixed(2)}
             Icon={Hobbies}
-            category1="Sports,"
+            category1="Sports"
             category2="hobbies"
           />
           <CategoryCard
-            amount="5 000.00"
+            amount={(categoryAmounts["Education"] || 0).toFixed(2)}
             Icon={Education}
             category1="Education"
           />
-          <CategoryCard amount="5 000.00" Icon={Other} category1="Other" />
+          <CategoryCard
+            amount={(categoryAmounts["Other"] || 0).toFixed(2)}
+            Icon={Other}
+            category1="Other"
+          />
         </div>
       </div>
     </>
   );
+};
+
+Expenses.propTypes = {
+  period: PropTypes.string.isRequired,
 };
 
 export default Expenses;

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Balance from "../../components/Balance";
 import BarChart from "../../components/BarChart";
 import CurrentPeriod from "../../components/CurrentPeriod";
@@ -7,30 +8,29 @@ import MainPageBtn from "../../components/MainPageBtn";
 import Income from "../../components/Income";
 import SwitchLeft from "../../components/Icons/SwitchLeft";
 import SwitchRight from "../../components/Icons/SwitchRight";
-import { useState } from "react";
 import Footer from "../../components/Footer";
 
-const expencesData = [
-  { label: "Pork", value: 100 },
-  { label: "Beef", value: 1000 },
-  { label: "Chiken", value: 600 },
-  { label: "Fish", value: 800 },
-  { label: "Panini", value: 220 },
-  { label: "Coffee", value: 350 },
+const expensesData = [
+  { label: "Pork", value: 1000 },
+  { label: "Beef", value: 800 },
+  { label: "Chiken", value: 650 },
+  { label: "Fish", value: 600 },
+  { label: "Panini", value: 400 },
+  { label: "Coffee", value: 390 },
   { label: "Spaghetti", value: 230 },
   { label: "Chocolate", value: 200 },
-  { label: "Olives", value: 300 },
-  { label: "Greens", value: 300 },
+  { label: "Olives", value: 100 },
+  { label: "Greens", value: 50 },
 ];
 
 const incomeData = [
-  { label: "Salary", value: 5000 },
-  { label: "Add Income", value: 5000 },
+  { label: "Me", value: 25000 },
+  { label: "My wife", value: 20000 },
 ];
 
 const Reports = () => {
   const [dataType, setDataType] = useState("expenses");
-  const data = dataType === "expenses" ? expencesData : incomeData;
+  const [period, setPeriod] = useState("July 2023");
 
   const handleSwitch = () => {
     setDataType((prevType) =>
@@ -44,18 +44,15 @@ const Reports = () => {
         <div className="sm:hidden block">
           <MainPageBtn />
         </div>
-        <div className="container mx-auto gap-8 flex flex-col-reverse justify-between sm:pt-10 items-center sm:flex-row ">
+        <div className="container mx-auto gap-8 flex flex-col-reverse justify-between items-center sm:flex-row ">
           <div className="hidden sm:block">
-            {" "}
             <MainPageBtn />
           </div>
-
           <Balance />
-          <CurrentPeriod />
+          <CurrentPeriod period={period} setPeriod={setPeriod} />
         </div>
-
         <ExpensesIncomeBar />
-        <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form ">
+        <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form">
           <div
             className="flex items-center justify-center gap-10 pb-2 pt-3 hover:cursor-pointer"
             onClick={handleSwitch}
@@ -66,11 +63,13 @@ const Reports = () => {
             </p>
             <SwitchRight />
           </div>
-          {dataType === "expenses" && <Expenses />}
-          {dataType === "income" && <Income />}
+          {dataType === "expenses" && <Expenses period={period} />}
+          {dataType === "income" && <Income period={period} />}
         </div>
-
-        <BarChart data={data} className="z-10" />
+        <BarChart
+          data={dataType === "expenses" ? expensesData : incomeData}
+          className="z-10"
+        />
         <Footer />
       </div>
     </div>
