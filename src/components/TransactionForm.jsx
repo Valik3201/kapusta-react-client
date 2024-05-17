@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
-const TransactionForm = ({ type, categories, getStats, addTransaction }) => {
+const TransactionForm = ({ type, categories, addTransaction }) => {
   const dispatch = useDispatch();
-  const loading = useSelector((state) => state.transactions.loading);
-  const error = useSelector((state) => state.transactions.error);
 
   const [form, setForm] = useState({
     date: getCurrentDate(),
@@ -44,9 +42,6 @@ const TransactionForm = ({ type, categories, getStats, addTransaction }) => {
       amount: "",
     });
   };
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
