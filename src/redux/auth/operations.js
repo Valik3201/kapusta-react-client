@@ -22,7 +22,10 @@ export const register = createAsyncThunk(
   async (credentials, thunkAPI) => {
     try {
       const res = await axios.post("/auth/register", credentials);
-      return res.data;
+
+      const loginResponse = await axios.post("/auth/login", credentials);
+      setAuthHeader(loginResponse.data.accessToken);
+      return { ...res.data, ...loginResponse.data };
     } catch (error) {
       if (error.response.status === 409) {
         return thunkAPI.rejectWithValue("This email is already in use");
