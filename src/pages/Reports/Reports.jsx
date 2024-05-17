@@ -1,41 +1,76 @@
+import { useState } from "react";
 import Balance from "../../components/Balance";
-import { Link } from "react-router-dom";
+import BarChart from "../../components/BarChart";
+import CurrentPeriod from "../../components/CurrentPeriod";
+import Expenses from "../../components/Expenses";
+import ExpensesIncomeBar from "../../components/ExpensesIncomeBar";
+import MainPageBtn from "../../components/MainPageBtn";
+import Income from "../../components/Income";
+import SwitchLeft from "../../components/Icons/SwitchLeft";
+import SwitchRight from "../../components/Icons/SwitchRight";
+import Footer from "../../components/Footer";
+
+const expensesData = [
+  { label: "Pork", value: 1000 },
+  { label: "Beef", value: 800 },
+  { label: "Chiken", value: 650 },
+  { label: "Fish", value: 600 },
+  { label: "Panini", value: 400 },
+  { label: "Coffee", value: 390 },
+  { label: "Spaghetti", value: 230 },
+  { label: "Chocolate", value: 200 },
+  { label: "Olives", value: 100 },
+  { label: "Greens", value: 50 },
+];
+
+const incomeData = [
+  { label: "Me", value: 25000 },
+  { label: "My wife", value: 20000 },
+];
 
 const Reports = () => {
+  const [dataType, setDataType] = useState("expenses");
+  const [period, setPeriod] = useState("July 2023");
+
+  const handleSwitch = () => {
+    setDataType((prevType) =>
+      prevType === "expenses" ? "income" : "expenses"
+    );
+  };
+
   return (
-    <div>
-      <div>
-        <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
-          <div className="container mx-auto flex justify-between pt-10 items-center">
-            <div className="flex gap-4 items-center">
-              <svg
-                width="18"
-                height="12"
-                viewBox="0 0 18 12"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M18 5H3.83L7.41 1.41L6 0L0 6L6 12L7.41 10.59L3.83 7H18V5Z"
-                  fill="#FF751D"
-                />
-              </svg>
-
-              <Link
-                to="/"
-                className="text-gray-darkest/70 hover:text-orange transition duration-200 ease-in-out"
-              >
-                Main Page
-              </Link>
-            </div>
-
-            <Balance />
-
-            <div>
-              <p className="text-gray-darkest/70">Current period:</p>
-            </div>
-          </div>
+    <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
+      <div className="p-8 ">
+        <div className="sm:hidden block">
+          <MainPageBtn />
         </div>
+        <div className="container mx-auto gap-8 flex flex-col-reverse justify-between items-center sm:flex-row ">
+          <div className="hidden sm:block">
+            <MainPageBtn />
+          </div>
+          <Balance />
+          <CurrentPeriod period={period} setPeriod={setPeriod} />
+        </div>
+        <ExpensesIncomeBar />
+        <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form">
+          <div
+            className="flex items-center justify-center gap-10 pb-2 pt-3 hover:cursor-pointer"
+            onClick={handleSwitch}
+          >
+            <SwitchLeft />
+            <p className="text-center text-black text-sm font-bold uppercase leading-normal">
+              {dataType === "expenses" ? "Expenses" : "Income"}
+            </p>
+            <SwitchRight />
+          </div>
+          {dataType === "expenses" && <Expenses period={period} />}
+          {dataType === "income" && <Income period={period} />}
+        </div>
+        <BarChart
+          data={dataType === "expenses" ? expensesData : incomeData}
+          className="z-10"
+        />
+        <Footer />
       </div>
     </div>
   );
