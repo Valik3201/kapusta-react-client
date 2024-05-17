@@ -1,7 +1,12 @@
-import Balance from "../../components/Balance";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import Balance from "../../components/Balance";
+import Expenses from "../../components/ExpencesHome";
+import Income from "../../components/IncomeHome";
 
 const Home = () => {
+  const [activeTab, setActiveTab] = useState("expenses");
+
   return (
     <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
       <div className="container mx-auto flex justify-between pt-10 items-center">
@@ -33,6 +38,17 @@ const Home = () => {
               </clipPath>
             </defs>
           </svg>
+        </div>
+
+        <div>
+          <nav>
+            <button onClick={() => setActiveTab("expenses")}>Expenses</button>
+            <button onClick={() => setActiveTab("income")}>Income</button>
+          </nav>
+          <div>
+            {activeTab === "expenses" && <Expenses />}
+            {activeTab === "income" && <Income />}
+          </div>
         </div>
       </div>
     </div>
