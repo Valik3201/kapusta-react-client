@@ -1,4 +1,8 @@
 const TransactionList = ({ transactions, onDelete }) => {
+  const sortedTransactions = transactions.slice().sort((a, b) => {
+    return new Date(b.date) - new Date(a.date);
+  });
+
   return (
     <table>
       <thead>
@@ -12,8 +16,8 @@ const TransactionList = ({ transactions, onDelete }) => {
       </thead>
 
       <tbody>
-        {transactions &&
-          transactions.map((transaction) => (
+        {sortedTransactions &&
+          sortedTransactions.map((transaction) => (
             <tr key={transaction._id}>
               <td>{transaction.date}</td>
               <td>{transaction.description}</td>
