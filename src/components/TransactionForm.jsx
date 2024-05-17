@@ -25,9 +25,13 @@ const TransactionForm = ({ type, categories, addTransaction }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addTransaction(form));
+    const transactionData = {
+      ...form,
+      amount: Number(form.amount),
+    };
+    dispatch(addTransaction(transactionData));
     setForm({
-      date: "",
+      date: getCurrentDate(),
       description: "",
       category: "",
       amount: "",
@@ -45,7 +49,7 @@ const TransactionForm = ({ type, categories, addTransaction }) => {
 
   return (
     <div>
-      <h1>{type === "expenses" ? "Expenses" : "Income"}</h1>
+      <h1 className="sr-only">{type === "expenses" ? "Expenses" : "Income"}</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="date"
