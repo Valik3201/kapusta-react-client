@@ -3,13 +3,11 @@ import AddIncome from "./Icons/CategoriesIcons/AddIncome";
 import Salary from "./Icons/CategoriesIcons/Salary";
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { useAuth } from "../hooks";
+import { useAuth } from "../path/to/auth"; // Adjust the import path to where `useAuth` is defined
 
 const Income = ({ period }) => {
-  const [categoryAmounts, setCategoryAmounts] = useState({});
   const { user } = useAuth();
-
-  console.log(user);
+  const [categoryAmounts, setCategoryAmounts] = useState({});
 
   useEffect(() => {
     if (user && user.transactions) {
@@ -45,46 +43,6 @@ const Income = ({ period }) => {
       </div>
     );
   }
-
-  /* mocked data 
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    fetch("/src/db/user.json")
-      .then((response) => response.json())
-      .then((data) => {
-        setUser(data);
-        const filteredTransactions = data.transactions.filter((transaction) => {
-          const transactionDate = new Date(transaction.date);
-          const [month, year] = period.split(" ");
-          return (
-            transactionDate.getMonth() + 1 ===
-              new Date(`${month} 1`).getMonth() + 1 &&
-            transactionDate.getFullYear() === parseInt(year)
-          );
-        });
-        const amounts = filteredTransactions.reduce(
-          (acc, { category, amount }) => {
-            if (!acc[category]) {
-              acc[category] = 0;
-            }
-            acc[category] += amount;
-            return acc;
-          },
-          {}
-        );
-        setCategoryAmounts(amounts);
-      })
-      .catch((error) => console.error("Error fetching the user data:", error));
-  }, [period]);
-
-  if (!user) {
-    return (
-      <div className="text-center text-3xl text-gray-darkest p-8">
-        Loading...
-      </div>
-    );
-  }*/
 
   return (
     <div className="flex flex-wrap items-start justify-stretch pb-2 pt-2 gap-5 pb-2 border-b border-gray-light-3 sm:border-none">

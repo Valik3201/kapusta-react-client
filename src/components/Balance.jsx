@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
+import { useAuth } from "../hooks";
 
 const Balance = () => {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
   const [balance, setBalance] = useState("00.00");
   const [inputBalance, setInputBalance] = useState("00.00");
 
+  useEffect(() => {
+    if (user) {
+      setBalance(user.balance);
+      setInputBalance(user.balance);
+    }
+  }, [user]);
+
+  /* mock data
+  const [user, setUser] = useState(null);
   useEffect(() => {
     fetch("/src/db/user.json")
       .then((response) => response.json())
@@ -14,7 +24,7 @@ const Balance = () => {
         setInputBalance(data.balance);
       })
       .catch((error) => console.error("Error fetching the user data:", error));
-  }, []);
+  }, []); */
 
   const handleChange = (e) => {
     setInputBalance(e.target.value);

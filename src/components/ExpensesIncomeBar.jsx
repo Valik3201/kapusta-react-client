@@ -1,11 +1,27 @@
 import { useEffect, useState } from "react";
 import DividerV from "./Icons/DividerV";
+import { useAuth } from "../hooks";
 
 const ExpensesIncomeBar = () => {
+  const { user } = useAuth();
   const [expenses, setExpenses] = useState(0);
   const [income, setIncome] = useState(0);
 
   useEffect(() => {
+    if (user && user.transactions) {
+      const totalExpenses = user.transactions
+        .filter((transaction) => transaction.category !== "Salary")
+        .reduce((acc, transaction) => acc + transaction.amount, 0);
+      const totalIncome = user.transactions
+        .filter((transaction) => transaction.category === "Salary")
+        .reduce((acc, transaction) => acc + transaction.amount, 0);
+
+      setExpenses(totalExpenses);
+      setIncome(totalIncome);
+    }
+  }, [user]);
+
+  /*   useEffect(() => {
     fetch("/src/db/user.json")
       .then((response) => response.json())
       .then((data) => {
@@ -21,7 +37,7 @@ const ExpensesIncomeBar = () => {
       })
       .catch((error) => console.error("Error fetching the user data:", error));
   }, []);
-
+ */
   return (
     <div className="container mx-auto flex sm:gap-4 justify-evenly sm:justify-center items-center mt-10 py-2 bg-white rounded-3xl sm:rounded-full shadow-form">
       <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">

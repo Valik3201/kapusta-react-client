@@ -12,11 +12,42 @@ import Other from "./Icons/CategoriesIcons/Other";
 import Education from "./Icons/CategoriesIcons/Education";
 import Hobbies from "./Icons/CategoriesIcons/Hobbies";
 import Communal from "./Icons/CategoriesIcons/Communal";
+import { useAuth } from "../hooks";
 
 const Expenses = ({ period }) => {
-  const [user, setUser] = useState(null);
+  const { user } = useAuth();
+
   const [categoryAmounts, setCategoryAmounts] = useState({});
 
+  useEffect(() => {
+    if (user && user.transactions) {
+      const filteredTransactions = user.transactions.filter((transaction) => {
+        const transactionDate = new Date(transaction.date);
+        const [month, year] = period.split(" ");
+        return (
+          transactionDate.getMonth() + 1 ===
+            new Date(`${month} 1`).getMonth() + 1 &&
+          transactionDate.getFullYear() === parseInt(year)
+        );
+      });
+
+      const amounts = filteredTransactions.reduce(
+        (acc, { category, amount }) => {
+          if (!acc[category]) {
+            acc[category] = 0;
+          }
+          acc[category] += amount;
+          return acc;
+        },
+        {}
+      );
+
+      setCategoryAmounts(amounts);
+    }
+  }, [period, user]);
+
+  /* mocked data
+  const [user, setUser] = useState(null);
   useEffect(() => {
     fetch("/src/db/user.json")
       .then((response) => response.json())
@@ -52,7 +83,7 @@ const Expenses = ({ period }) => {
         Loading...
       </div>
     );
-  }
+  } */
 
   return (
     <>
