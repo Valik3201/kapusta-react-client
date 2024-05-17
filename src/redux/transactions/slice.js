@@ -7,9 +7,12 @@ import {
   deleteTransaction,
   getIncomeCategories,
   getExpenseCategories,
+  updateUserBalance,
 } from "./operations";
+import { refreshUser } from "../auth/operations";
 
 const initialState = {
+  balance: 0,
   incomeStats: {},
   expenseStats: {},
   incomeCategories: [],
@@ -31,6 +34,7 @@ const transactionsSlice = createSlice({
       })
       .addCase(addIncome.fulfilled, (state, action) => {
         state.loading = false;
+        state.balance = action.payload.newBalance;
         if (!state.incomeStats.incomes) {
           state.incomeStats.incomes = [];
         }
@@ -60,6 +64,7 @@ const transactionsSlice = createSlice({
       })
       .addCase(addExpense.fulfilled, (state, action) => {
         state.loading = false;
+        state.balance = action.payload.newBalance;
         if (!state.expenseStats.expenses) {
           state.expenseStats.expenses = [];
         }
@@ -89,6 +94,7 @@ const transactionsSlice = createSlice({
       })
       .addCase(deleteTransaction.fulfilled, (state, action) => {
         state.loading = false;
+        state.balance = action.payload.newBalance;
         // Filter out deleted transaction from incomes and expenses
         if (state.incomeStats.incomes) {
           state.incomeStats.incomes = state.incomeStats.incomes.filter(
@@ -128,6 +134,37 @@ const transactionsSlice = createSlice({
         state.expenseCategories = action.payload;
       })
       .addCase(getExpenseCategories.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Get User Balance
+      .addCase(refreshUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(refreshUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        if (action.payload && action.payload.balance !== undefined) {
+          state.balance = action.payload.balance;
+        } else {
+          state.balance = 0; // Или любое значение по умолчанию
+        }
+      })
+      .addCase(refreshUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Update User Balance
+      .addCase(updateUserBalance.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUserBalance.fulfilled, (state, action) => {
+        state.loading = false;
+        state.balance = action.payload.newBalance;
+      })
+      .addCase(updateUserBalance.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
