@@ -1,11 +1,11 @@
-//import { useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Balance from "../../components/Balance";
-//import Expenses from "../../components/ExpencesHome";
-//import Income from "../../components/IncomeHome";
+import Expenses from "../../components/ExpencesHome";
+import Income from "../../components/IncomeHome";
 
 const Home = () => {
-  //const [activeTab, setActiveTab] = useState("expenses");
+  const [activeTab, setActiveTab] = useState("expenses");
 
   return (
     <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
@@ -39,18 +39,34 @@ const Home = () => {
             </defs>
           </svg>
         </div>
-
-        {/* <div>
-          <nav>
-            <button onClick={() => setActiveTab("expenses")}>Expenses</button>
-            <button onClick={() => setActiveTab("income")}>Income</button>
-          </nav>
-          <div>
-            {activeTab === "expenses" && <Expenses />}
-            {activeTab === "income" && <Income />}
-          </div>
-        </div> */}
       </div>
+
+      <div className="hidden md:block md:mt-14 lg:mt-2 container mx-auto md:w-[704px] lg:w-[1098px]">
+        <nav>
+          <button
+            onClick={() => setActiveTab("expenses")}
+            className={`w-36 uppercase font-bold text-center py-4 rounded-t-3xl ${
+              activeTab === "expenses" ? "bg-white text-orange" : "bg-[#FAFBFD]"
+            }`}
+          >
+            Expenses
+          </button>
+          <button
+            onClick={() => setActiveTab("income")}
+            className={`w-36 uppercase font-bold text-center py-4 rounded-t-3xl ${
+              activeTab === "income" ? "bg-white text-orange" : "bg-[#FAFBFD]"
+            }`}
+          >
+            Income
+          </button>
+        </nav>
+        <div className="bg-white rounded-[1.88rem] rounded-tl-none shadow-home md:h-[616px] lg:h-[580px]">
+          {activeTab === "expenses" && <Expenses />}
+          {activeTab === "income" && <Income />}
+        </div>
+      </div>
+
+      <div className="relative lg:bg-desktop-cabbages bg-top-4 bg-no-repeat lg:bg-100% bottom-10 left-0 w-full h-[232px] -z-10"></div>
     </div>
   );
 };

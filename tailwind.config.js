@@ -24,7 +24,8 @@ export default {
         form: "0 10px 60px 0 rgba(170, 178, 197, 0.2)",
         google: "1px 2px 3px 0 rgba(170, 178, 197, 0.2)",
         "form-btn": "1px 3px 5px 0 rgba(82, 85, 95, 0.15)",
-        "form-btn-hover": "1px 3px 5px 0 rgba(255, 107, 8, 0.35);",
+        "form-btn-hover": "1px 3px 5px 0 rgba(255, 107, 8, 0.35)",
+        home: "0 10px 60px 0 rgba(170, 178, 197, 0.2)",
       },
       backgroundImage: {
         "desktop-cabbages": "url('/background/desktop-cabbages.png')",
