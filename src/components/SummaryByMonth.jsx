@@ -1,24 +1,11 @@
-import { useSelector } from "react-redux";
 import { getMonthIndex } from "../helpers/getMonthIndex";
-import {
-  selectExpenseStats,
-  selectLoading,
-  selectError,
-} from "../redux/transactions/selectors";
 
-const SummaryByMonth = () => {
-  const expenseStats = useSelector(selectExpenseStats);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  if (!expenseStats || !expenseStats.monthsStats) return null;
+const SummaryByMonth = ({ monthStats }) => {
+  if (!monthStats) return null;
 
   const currentMonthIndex = new Date().getMonth() + 1;
 
-  const monthsData = Object.entries(expenseStats.monthsStats)
+  const monthsData = Object.entries(monthStats)
     .filter(([month]) => {
       const monthIndex = getMonthIndex(month);
       return monthIndex <= currentMonthIndex;

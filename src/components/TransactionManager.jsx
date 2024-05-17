@@ -40,7 +40,6 @@ const TransactionManager = ({
       <TransactionForm
         type={type}
         categories={categories}
-        getStats={getStats}
         addTransaction={addTransaction}
         getCategories={getCategories}
       />
@@ -52,7 +51,7 @@ const TransactionManager = ({
             onDelete={handleDelete}
           />
 
-          <SummaryByMonth monthStats={stats.monthStats} />
+          <SummaryByMonth monthStats={stats.monthsStats} />
         </>
       )}
     </div>
