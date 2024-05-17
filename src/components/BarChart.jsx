@@ -1,9 +1,13 @@
 import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
-import ChartDataLabels from "chartjs-plugin-datalabels"; // Import the plugin
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { useMediaQuery } from "react-responsive";
 
 const BarChart = ({ data }) => {
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  console.log(isMobile);
+
   const chartData = {
     labels: data.map((item) => item.label),
     datasets: [
@@ -12,20 +16,22 @@ const BarChart = ({ data }) => {
         data: data.map((item) => item.value),
         backgroundColor: ["#FF751D", "#FFDAC0", "#FFDAC0"],
         borderRadius: 10,
-        barThickness: 38,
+        barThickness: isMobile ? 15 : 30,
+        barPercentage: isMobile ? 0.3 : 0.7,
+        categoryPercentage: isMobile ? 0.4 : 0.8,
       },
     ],
   };
 
   const options = {
-    indexAxis: "x",
-    responsive: true,
+    type: "bar",
+    indexAxis: isMobile ? "y" : "x",
     layout: {
       padding: {
-        left: 20,
-        right: 20,
-        top: 20,
-        bottom: 20,
+        left: isMobile ? 40 : 20,
+        right: isMobile ? 100 : 20,
+        top: isMobile ? 0 : 20,
+        bottom: isMobile ? 0 : 20,
       },
     },
     scales: {
@@ -34,15 +40,15 @@ const BarChart = ({ data }) => {
           display: false,
         },
         ticks: {
-          display: true,
+          display: !isMobile,
         },
       },
       y: {
         grid: {
-          display: true,
+          display: !isMobile,
         },
         ticks: {
-          display: false,
+          display: isMobile,
         },
       },
     },
@@ -51,14 +57,21 @@ const BarChart = ({ data }) => {
         display: false,
       },
       datalabels: {
-        anchor: "end",
-        align: "end",
+        anchor: isMobile ? "end" : "end",
+        align: isMobile ? "end" : "end",
+        formatter: (value) => {
+          return ` ${value} HUA`;
+        },
+        color: "#52555F",
+        font: {
+          size: isMobile ? 10 : 12,
+        },
       },
     },
   };
 
   return (
-    <div className="container mx-auto flex flex-col gap-4 justify-center items-center my-10 pt-10 pb-10 pl-32 pr-32 bg-white rounded-3xl shadow-form w-758">
+    <div className="container mx-auto flex flex-col gap-4 justify-center items-center sm:mt-10 sm:py-14 p-2 md:p-8 lg:px-32 bg-white rounded-3xl shadow-none sm:shadow-form h-full">
       <Bar data={chartData} options={options} plugins={[ChartDataLabels]} />
     </div>
   );
