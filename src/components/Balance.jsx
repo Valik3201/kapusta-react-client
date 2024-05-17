@@ -4,7 +4,7 @@ import { useAuth } from "../hooks";
 const Balance = () => {
   const { user } = useAuth();
 
-  const [balance, setBalance] = useState("00.00");
+  const [setBalance] = useState("00.00");
   const [inputBalance, setInputBalance] = useState(user.balance);
 
   const handleChange = (e) => {
