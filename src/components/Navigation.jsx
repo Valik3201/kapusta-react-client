@@ -8,7 +8,7 @@ const Navigation = () => {
 
   return (
     <>
-      <header className="h-14 px-4 flex items-center justify-between bg-white">
+      <header className="h-14 px-4 md:px-8 lg:px-4 flex items-center justify-between bg-white">
         <Link to="/">
           <img src={kapustaLogo} alt="Kapusta logo" />
         </Link>
