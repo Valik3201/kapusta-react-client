@@ -1,15 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectBalance } from "../redux/transactions/selectors";
+import { updateUserBalance } from "../redux/transactions/operations";
 
 const Balance = () => {
-  const [balance, setBalance] = useState("00.00");
-  const [inputBalance, setInputBalance] = useState("");
+  const dispatch = useDispatch();
+  const balance = useSelector(selectBalance);
+
+  const [inputBalance, setInputBalance] = useState(balance);
+
+  useEffect(() => {
+    setInputBalance(balance);
+  }, [balance]);
 
   const handleChange = (e) => {
     setInputBalance(e.target.value);
   };
 
   const handleConfirm = () => {
-    setBalance(inputBalance);
+    dispatch(updateUserBalance(Number(inputBalance)));
   };
 
   return (
