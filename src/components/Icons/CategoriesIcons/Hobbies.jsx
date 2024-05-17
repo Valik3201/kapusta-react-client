@@ -4,7 +4,6 @@ const Hobbies = () => {
       width="56"
       height="49"
       viewBox="0 0 56 49"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
       <path

@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* helpers */
 .zIndex {
   z-index: -1000 !important;
 }

@@ -2,10 +2,13 @@ import PropTypes from "prop-types";
 
 const CategoryCard = ({ amount, Icon, category1, category2 }) => {
   return (
-    <div className="flex flex-col items-center p-2">
+    <div className="flex flex-col items-center p-2 hover:text-orange transition duration-200 ease-in-out">
       <p className="text-xs text-gray-darkest-400">{amount}</p>
-      <div className="flex items-center justify-center w-16 h-16 my-2 hover:fill-orange transition duration-200 ease-in-out">
-        <Icon />
+      <div className="flex items-center justify-center w-16 h-16 my-2 relative ">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <Icon />
+        </div>
+        <div className="h-12 w-14 rounded-3xl bg-gray-light hover:bg-orange transition duration-200 ease-in-out"></div>
       </div>
 
       <div className="category-container flex flex-col justify-center items-center">
