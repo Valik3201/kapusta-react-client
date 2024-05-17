@@ -3,16 +3,12 @@ import ArrowLeft from "./Icons/ArrowLeft";
 
 const MainPageBtn = () => {
   return (
-    <div className="flex gap-4 items-center">
+    <Link to="/" className="flex gap-4 items-center hover:pointer ">
       <ArrowLeft />
-
-      <Link
-        to="/"
-        className="text-gray-darkest/70 hover:text-orange transition duration-200 ease-in-out"
-      >
+      <p className="text-gray-darkest/70 hover:text-orange transition duration-200 ease-in-out text-xs hidden sm:block">
         Main Page
-      </Link>
-    </div>
+      </p>
+    </Link>
   );
 };
 
