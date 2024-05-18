@@ -1,0 +1,30 @@
+.container {
+    width: 280px;
+    height: 496px;
+    position: absolute;
+    top: 255px;
+    left: 20px;
+    z-index: 100;
+}
+
+@media (min-width: 768px){
+    .container {
+        position: absolute;
+        width: 426px;
+        height: 552px;
+       left: 171px;
+       right: 171px;
+    
+    }
+}
+
+@media (min-width: 1280px){
+    .container {
+        display: block;
+        width: 426px;
+        height: 552px;
+        top: 173px;
+        left: 763px;
+    
+    }
+}

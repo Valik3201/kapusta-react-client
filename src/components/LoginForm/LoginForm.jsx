@@ -3,6 +3,7 @@ import googleLogo from "../../assets/google-logo.svg";
 import { useDispatch } from "react-redux";
 import { logIn, register } from "../../redux/auth/operations";
 import { useAuth } from "../../hooks";
+import css from "./LoginForm.module.css";
 
 const InputWithValidation = ({
   value,
@@ -89,6 +90,7 @@ const LoginForm = () => {
   };
 
   return (
+    <div className={css.container}>
     <div className="bg-white shadow-form rounded-[1.88rem] px-5 md:px-20 py-14">
       <h2 className="text-gray-darkest text-xs text-center">
         You can log in with your Google Account:
@@ -134,6 +136,7 @@ const LoginForm = () => {
           </button>
         </div>
       </form>
+    </div>
     </div>
   );
 };
