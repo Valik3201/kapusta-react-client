@@ -38,13 +38,13 @@ const CurrentPeriod = ({ period, setPeriod }) => {
     <div className="flex flex-col items-center h-full gap-2">
       <p className="text-gray-darkest/70 text-xs">Current period:</p>
       <div className="flex items-center gap-2">
-        <div onClick={handlePrev}>
+        <div onClick={handlePrev} className="cursor-pointer">
           <SwitchLeft />
         </div>
         <p className="text-center text-sm text-black text-sm font-bold uppercase leading-normal w-32">
           {period}
         </p>
-        <div onClick={handleNext}>
+        <div onClick={handleNext} className="cursor-pointer">
           <SwitchRight />
         </div>
       </div>
