@@ -41,7 +41,7 @@ const CurrentPeriod = ({ period, setPeriod }) => {
         <div onClick={handlePrev} className="cursor-pointer">
           <SwitchLeft />
         </div>
-        <p className="text-center text-sm text-black text-sm font-bold uppercase leading-normal w-32">
+        <p className="text-center text-sm text-black font-bold uppercase leading-normal w-32">
           {period}
         </p>
         <div onClick={handleNext} className="cursor-pointer">

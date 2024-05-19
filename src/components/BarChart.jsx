@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
-import "chart.js/auto";
-import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useMediaQuery } from "react-responsive";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import "chart.js/auto";
 
 const BarChart = ({ data }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
@@ -59,7 +59,7 @@ const BarChart = ({ data }) => {
         anchor: isMobile ? "end" : "end",
         align: isMobile ? "end" : "end",
         formatter: (value) => {
-          return ` ${value} HUA`;
+          return ` ${value} UAH`;
         },
         color: "#52555F",
         font: {

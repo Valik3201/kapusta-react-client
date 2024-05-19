@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Balance from "../../components/Balance";
 import BarChart from "../../components/BarChart";
 import CurrentPeriod from "../../components/CurrentPeriod";
@@ -10,10 +10,28 @@ import SwitchLeft from "../../components/Icons/SwitchLeft";
 import SwitchRight from "../../components/Icons/SwitchRight";
 import Footer from "../../components/Footer";
 import { expensesData, incomeData } from "../../db/data";
+import { getPeriodData } from "../../redux/transactions/operations";
+import { useDispatch, useSelector } from "react-redux";
+import { selectPeriodData } from "../../redux/transactions/selectors";
+import { getCurrentPeriod } from "../../helpers/getCurrentPeriod";
 
 const Reports = () => {
   const [dataType, setDataType] = useState("expenses");
-  const [period, setPeriod] = useState("July 2023");
+  const [period, setPeriod] = useState(getCurrentPeriod());
+
+  const dispatch = useDispatch();
+  const periodData = useSelector(selectPeriodData);
+
+  console.log(periodData);
+
+  useEffect(() => {
+    const [month, year] = period.split(" ");
+    const monthIndex = (
+      "0" +
+      (new Date(`${month} 1, ${year}`).getMonth() + 1)
+    ).slice(-2);
+    dispatch(getPeriodData(`${year}-${monthIndex}`));
+  }, [dispatch, period]);
 
   const handleSwitch = () => {
     setDataType((prevType) =>
@@ -34,7 +52,14 @@ const Reports = () => {
           <Balance />
           <CurrentPeriod period={period} setPeriod={setPeriod} />
         </div>
-        <ExpensesIncomeBar />
+
+        {periodData && (
+          <ExpensesIncomeBar
+            expenseTotal={periodData.expenses.expenseTotal}
+            incomeTotal={periodData.incomes.incomeTotal}
+          />
+        )}
+
         <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form">
           <div
             className="flex items-center justify-center gap-10 pb-2 pt-3 hover:cursor-pointer"
@@ -49,10 +74,12 @@ const Reports = () => {
           {dataType === "expenses" && <Expenses period={period} />}
           {dataType === "income" && <Income period={period} />}
         </div>
+
         <BarChart
           data={dataType === "expenses" ? expensesData : incomeData}
           className="z-10"
         />
+
         <Footer />
       </div>
     </div>
