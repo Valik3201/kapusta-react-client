@@ -16,7 +16,7 @@ const SummaryByMonth = ({ monthStats }) => {
     }));
 
   return (
-    <div className="relative overflow-x-auto">
+    <div className="relative hidden md:block">
       <table className="bg-gray-light-2 rounded-2xl rounded-bl-none w-full">
         <thead className="border-b-4 border-white">
           <tr>
@@ -32,7 +32,7 @@ const SummaryByMonth = ({ monthStats }) => {
               className="text-gray-darkest uppercase border-b-2 border-white"
             >
               <td className="px-4 py-3">{month}</td>
-              <td className="px-4 py-3 text-right">{value} UAH</td>
+              <td className="px-4 py-3 text-right">{value.toFixed(2)}</td>
             </tr>
           ))}
         </tbody>

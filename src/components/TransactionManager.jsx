@@ -48,7 +48,7 @@ const TransactionManager = ({
           />
 
           {stats && (
-            <div className="flex gap-[75px] px-8 min-w-full h-full">
+            <div className="flex md:gap-[75px] md:px-8 min-w-full h-full">
               <TransactionList
                 transactions={
                   type === "expenses" ? stats.expenses : stats.incomes
@@ -66,12 +66,12 @@ const TransactionManager = ({
       </div>
 
       {stats && (
-        <div className="flex justify-between items-end">
-          <div className="block lg:hidden w-[230px] text-xs mt-10 pb-10">
+        <div className="justify-between items-end hidden md:flex lg:hidden">
+          <div className="w-[230px] text-xs mt-10 pb-10">
             <SummaryByMonth monthStats={stats.monthsStats} />
           </div>
 
-          <div className="hidden md:block lg:hidden">
+          <div>
             <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:mr-10  md:mb-10 md:bg-top md:bg-100% md:h-[142px] md:w-[183px]"></div>
           </div>
         </div>
