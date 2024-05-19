@@ -19,6 +19,7 @@ export default {
         green: "#407946",
         black: "#000000",
         white: "#FFFFFF",
+        navy: "#071F41",
       },
       boxShadow: {
         form: "0 10px 60px 0 rgba(170, 178, 197, 0.2)",
