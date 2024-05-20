@@ -1,126 +1,158 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { selectLoading, selectError } from "../redux/transactions/selectors";
-import TransactionForm from "./TransactionForm";
-import TransactionList from "./TransactionList";
-import SummaryByMonth from "./SummaryByMonth";
-import Spinner from "./Spinner";
+import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import CategoryCard from "./CategoryCard";
+//import Spinner from "./Spinner";
+import { selectError } from "../redux/transactions/selectors";
+// category icons
+import Alcohol from "./Icons/CategoriesIcons/Alcohol";
+import Products from "./Icons/CategoriesIcons/Products";
+import Entertainment from "./Icons/CategoriesIcons/Entertainment";
+import Health from "./Icons/CategoriesIcons/Health";
+import Transport from "./Icons/CategoriesIcons/Transport";
+import Housing from "./Icons/CategoriesIcons/Housing";
+import Technique from "./Icons/CategoriesIcons/Technique";
+import Other from "./Icons/CategoriesIcons/Other";
+import Education from "./Icons/CategoriesIcons/Education";
+import Hobbies from "./Icons/CategoriesIcons/Hobbies";
+import Communal from "./Icons/CategoriesIcons/Communal";
+import AddIncome from "./Icons/CategoriesIcons/AddIncome";
+import Salary from "./Icons/CategoriesIcons/Salary";
+import categoryTranslations from "../helpers/categoryTranslations";
+import monthNames from "../helpers/monthNames";
 
-const categoryTranslations = {
-  "З/П": "Salary",
-  "Коммуналка и связь": "Communal and Communications",
-  Транспорт: "Transport",
-  Алкоголь: "Alcohol",
-  Развлечения: "Entertainment",
-  "Доп. доход": "Add Income",
-  Здоровье: "Health",
-  Продукты: "Products",
-  Техника: "Technique",
-  Образование: "Education",
-  Хобби: "Hobbies",
-  " Спорт и хобби": "Sport and hobbies",
-  "Всё для дома": "Everything for home",
-  Прочее: "Other",
-  Другое: "Other",
-};
-
-const TransactionManager = ({
+const ReportsManager = ({
   type,
+  period,
   getStats,
   getCategories,
-  addTransaction,
-  deleteTransaction,
   selectCategories,
   selectStats,
 }) => {
   const dispatch = useDispatch();
-  const loading = useSelector(selectLoading);
+  //const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const categories = useSelector(selectCategories);
   const stats = useSelector(selectStats);
+  const [categoryAmounts, setCategoryAmounts] = useState({});
 
   useEffect(() => {
-    console.log("Categories:", categories);
     dispatch(getStats());
 
-    if (categories && categories.length === 0) {
+    if (categories.length === 0) {
       dispatch(getCategories());
     }
-  }, [dispatch, categories, getStats, getCategories]);
+  }, [dispatch, categories.length, getStats, getCategories]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteTransaction(id));
-  };
+  const transactions = useMemo(() => {
+    if (stats) {
+      const [month, year] = period.split(" ");
+      return (
+        type === "expenses" || type === "expenseReports"
+          ? stats.expenses
+          : stats.incomes
+      ).filter(
+        (transaction) =>
+          new Date(transaction.date).getMonth() + 1 ===
+            monthNames.indexOf(month) + 1 &&
+          new Date(transaction.date).getFullYear() === parseInt(year)
+      );
+    }
+    return [];
+  }, [stats, type, period]);
 
-  const getTranslation = (category) => {
-    return categoryTranslations[category] || category;
-  };
+  useEffect(() => {
+    const amounts = transactions.reduce((acc, { category, amount }) => {
+      const translatedCategory = categoryTranslations[category] || category;
+      if (!acc[translatedCategory]) {
+        acc[translatedCategory] = 0;
+      }
+      acc[translatedCategory] += amount;
+      return acc;
+    }, {});
 
-  const translateTransactions = (transactions) => {
-    return transactions.map((transaction) => ({
-      ...transaction,
-      category: getTranslation(transaction.category),
-    }));
-  };
+    setCategoryAmounts(amounts);
+  }, [transactions]);
 
-  if (loading) return <Spinner />;
+  const renderCategoryCard = (amount, Icon, category1, category2 = null) => (
+    <CategoryCard
+      key={category1}
+      amount={amount.toFixed(2)}
+      Icon={Icon}
+      category1={category1}
+      category2={category2}
+    />
+  );
+
+  //if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
+
+  const expenseCategories = [
+    { name: "Products", Icon: Products },
+    { name: "Alcohol", Icon: Alcohol },
+    { name: "Entertainment", Icon: Entertainment },
+    { name: "Health", Icon: Health },
+    { name: "Transport", Icon: Transport },
+    { name: "Housing", Icon: Housing },
+    { name: "Technique", Icon: Technique },
+    {
+      name: "Communal and ",
+      Icon: Communal,
+      category2: "Communications",
+    },
+    { name: "Hobbies", Icon: Hobbies, category2: "Sports" },
+    { name: "Education", Icon: Education },
+    { name: "Other", Icon: Other },
+  ];
+
+  const incomeCategories = [
+    { name: "Salary", Icon: Salary },
+    { name: "Add Income", Icon: AddIncome },
+  ];
+
+  const categoriesToRender =
+    type === "expenses" || type === "expenseReports"
+      ? expenseCategories
+      : incomeCategories;
 
   return (
     <>
-      <div className="md:h-[616px] lg:h-[580px]">
-        <div className="px-4">
-          <TransactionForm
-            type={type}
-            categories={categories.map(getTranslation)}
-            addTransaction={addTransaction}
-            getCategories={getCategories}
-          />
-
-          {stats && (
-            <div className="flex gap-[75px] px-8 min-w-full h-full">
-              <TransactionList
-                transactions={
-                  type === "expenses"
-                    ? translateTransactions(stats.expenses)
-                    : translateTransactions(stats.incomes)
-                }
-                type={type}
-                onDelete={handleDelete}
-              />
-
-              <div className="hidden lg:block w-1/5 text-xs">
-                <SummaryByMonth monthStats={stats.monthsStats} />
-              </div>
-            </div>
+      <div className="block sm:hidden">
+        <div className="space-y-4">
+          {categoriesToRender.map(({ name, Icon, category2 }) =>
+            renderCategoryCard(
+              categoryAmounts[name] || 0,
+              Icon,
+              name,
+              category2
+            )
           )}
         </div>
       </div>
 
-      {stats && (
-        <div className="flex justify-between items-end">
-          <div className="block lg:hidden w-[230px] text-xs mt-10 pb-10">
-            <SummaryByMonth monthStats={stats.monthsStats} />
-          </div>
-
-          <div className="hidden md:block lg:hidden">
-            <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:mr-10  md:mb-10 md:bg-top md:bg-100% md:h-[142px] md:w-[183px]"></div>
-          </div>
+      <div className="hidden sm:block">
+        <div className="flex flex-wrap items-start justify-center pb-2 pt-2 gap-5">
+          {categoriesToRender.map(({ name, Icon, category2 }) =>
+            renderCategoryCard(
+              categoryAmounts[name] || 0,
+              Icon,
+              name,
+              category2
+            )
+          )}
         </div>
-      )}
+      </div>
     </>
   );
 };
 
-TransactionManager.propTypes = {
+ReportsManager.propTypes = {
   type: PropTypes.oneOf(["expenses", "incomes", "expenseReports"]).isRequired,
+  period: PropTypes.string.isRequired,
   getStats: PropTypes.func.isRequired,
   getCategories: PropTypes.func.isRequired,
-  addTransaction: PropTypes.func.isRequired,
-  deleteTransaction: PropTypes.func.isRequired,
   selectCategories: PropTypes.func.isRequired,
   selectStats: PropTypes.func.isRequired,
 };
 
-export default TransactionManager;
+export default ReportsManager;

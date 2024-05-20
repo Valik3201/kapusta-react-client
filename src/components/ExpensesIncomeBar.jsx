@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DividerV from "./Icons/DividerV";
 import {
@@ -8,31 +8,18 @@ import {
 import {
   selectIncomeStats,
   selectExpenseStats,
-  selectLoading,
+  //selectLoading,
   selectError,
 } from "../redux/transactions/selectors";
-import Spinner from "./Spinner";
+//import Spinner from "./Spinner";
+import categoryTranslations from "../helpers/categoryTranslations";
+import monthNames from "../helpers/monthNames";
 
-const categoryTranslations = {
-  "З/П": "Salary",
-  "Коммуналка и связь": "Communal and Communications",
-  Транспорт: "Transport",
-  Алкоголь: "Alcohol",
-  Развлечения: "Entertainment",
-  "Доп. доход": "Additional Income",
-  Здоровье: "Health",
-  Продукты: "Products",
-  Техника: "Technique",
-  Образование: "Education",
-  Хобби: "Hobbies",
-  Другое: "Other",
-};
-
-const ExpensesIncomeBar = () => {
+const ExpensesIncomeBar = ({ period }) => {
   const dispatch = useDispatch();
   const incomeStats = useSelector(selectIncomeStats);
   const expenseStats = useSelector(selectExpenseStats);
-  const loading = useSelector(selectLoading);
+  //const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
 
   useEffect(() => {
@@ -40,22 +27,42 @@ const ExpensesIncomeBar = () => {
     dispatch(getExpenseStats());
   }, [dispatch]);
 
-  if (loading) return <Spinner />;
-  if (error) return <div>Error: {error}</div>;
+  const filteredTransactions = (transactions, period) => {
+    const [month, year] = period.split(" ");
+    return transactions.filter(
+      (transaction) =>
+        new Date(transaction.date).getMonth() + 1 ===
+          monthNames.indexOf(month) + 1 &&
+        new Date(transaction.date).getFullYear() === parseInt(year)
+    );
+  };
 
-  const translatedExpenses =
-    expenseStats.expenses?.map((transaction) => ({
-      ...transaction,
-      category:
-        categoryTranslations[transaction.category] || transaction.category,
-    })) || [];
+  const translatedExpenses = useMemo(() => {
+    if (expenseStats.expenses) {
+      const filteredExpenses = filteredTransactions(
+        expenseStats.expenses,
+        period
+      );
+      return filteredExpenses.map((transaction) => ({
+        ...transaction,
+        category:
+          categoryTranslations[transaction.category] || transaction.category,
+      }));
+    }
+    return [];
+  }, [expenseStats.expenses, period]);
 
-  const translatedIncome =
-    incomeStats.incomes?.map((transaction) => ({
-      ...transaction,
-      category:
-        categoryTranslations[transaction.category] || transaction.category,
-    })) || [];
+  const translatedIncome = useMemo(() => {
+    if (incomeStats.incomes) {
+      const filteredIncome = filteredTransactions(incomeStats.incomes, period);
+      return filteredIncome.map((transaction) => ({
+        ...transaction,
+        category:
+          categoryTranslations[transaction.category] || transaction.category,
+      }));
+    }
+    return [];
+  }, [incomeStats.incomes, period]);
 
   const totalExpenses = translatedExpenses.reduce(
     (acc, transaction) => acc + transaction.amount,
@@ -66,6 +73,9 @@ const ExpensesIncomeBar = () => {
     (acc, transaction) => acc + transaction.amount,
     0
   );
+
+  //if (loading) return <Spinner />;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="container mx-auto flex sm:gap-4 justify-evenly sm:justify-center items-center mt-10 py-2 bg-white rounded-3xl sm:rounded-full shadow-form">

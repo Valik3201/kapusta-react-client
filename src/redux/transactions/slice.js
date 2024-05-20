@@ -8,7 +8,6 @@ import {
   getIncomeCategories,
   getExpenseCategories,
   updateUserBalance,
-  getPeriodData,
 } from "./operations";
 import { refreshUser } from "../auth/operations";
 
@@ -167,19 +166,6 @@ const transactionsSlice = createSlice({
         state.balance = action.payload.newBalance;
       })
       .addCase(updateUserBalance.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      // Get Period Data
-      .addCase(getPeriodData.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getPeriodData.fulfilled, (state, action) => {
-        state.loading = false;
-        state.periodData = action.payload;
-      })
-      .addCase(getPeriodData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

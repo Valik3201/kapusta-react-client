@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import {
   getExpenseStats,
   getExpenseCategories,
@@ -10,9 +9,7 @@ import {
 import ReportsManager from "./ReportsManager";
 import PropTypes from "prop-types";
 
-const ExpensesReports = () => {
-  const period = useSelector((state) => state.transactions.period); // <-- Get period from state
-
+const ExpensesReports = ({ period }) => {
   return (
     <ReportsManager
       type="expenses"

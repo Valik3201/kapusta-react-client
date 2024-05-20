@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Balance from "../../components/Balance";
-import CurrentPeriod from "../../components/CurrentPeriod";
+import SelectedPeriod from "../../components/SelectedPeriod";
 import ExpensesIncomeBar from "../../components/ExpensesIncomeBar";
 import MainPageBtn from "../../components/MainPageBtn";
 import Footer from "../../components/Footer";
@@ -8,9 +8,15 @@ import ExpensesReports from "../../components/ExpensesReports";
 import IncomeReports from "../../components/IncomeReports";
 import SwitchLeft from "../../components/Icons/SwitchLeft";
 import SwitchRight from "../../components/Icons/SwitchRight";
+import { getCurrentPeriod } from "../../helpers/getCurrentPeriod";
 
 const Reports = () => {
   const [dataType, setDataType] = useState("expenses");
+  const [period, setPeriod] = useState(getCurrentPeriod());
+
+  useEffect(() => {
+    setPeriod(getCurrentPeriod());
+  }, []);
 
   const handleSwitch = () => {
     setDataType((prevType) =>
@@ -29,9 +35,9 @@ const Reports = () => {
             <MainPageBtn />
           </div>
           <Balance />
-          <CurrentPeriod />
+          <SelectedPeriod period={period} setPeriod={setPeriod} />
         </div>
-        <ExpensesIncomeBar />
+        <ExpensesIncomeBar period={period} />
         <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form">
           <div
             className="flex items-center justify-center gap-10 pb-2 pt-3 hover:cursor-pointer"
@@ -43,8 +49,8 @@ const Reports = () => {
             </p>
             <SwitchRight />
           </div>
-          {dataType === "expenses" && <ExpensesReports />}
-          {dataType === "income" && <IncomeReports />}
+          {dataType === "expenses" && <ExpensesReports period={period} />}
+          {dataType === "income" && <IncomeReports period={period} />}
         </div>
         <Footer />
       </div>

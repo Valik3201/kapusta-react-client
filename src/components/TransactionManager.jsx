@@ -5,24 +5,7 @@ import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 import SummaryByMonth from "./SummaryByMonth";
 import Spinner from "./Spinner";
-
-const categoryTranslations = {
-  "З/П": { en: "Salary", uk: "Зарплата" },
-  "Коммуналка и связь": {
-    en: "Communal and Communications",
-    uk: "Комуналка і зв'язок",
-  },
-  Транспорт: { en: "Transport", uk: "Транспорт" },
-  Алкоголь: { en: "Alcohol", uk: "Алкоголь" },
-  Развлечения: { en: "Entertainment", uk: "Розваги" },
-  "Доп. доход": { en: "Add Income", uk: "Додатковий дохід" },
-  Здоровье: { en: "Health", uk: "Здоров'я" },
-  Продукты: { en: "Products", uk: "Продукти" },
-  Техника: { en: "Technique", uk: "Техніка" },
-  Образование: { en: "Education", uk: "Освіта" },
-  Хобби: { en: "Hobbies", uk: "Хобі" },
-  Другое: { en: "Other", uk: "Інше" },
-};
+import categoryTranslations from "../helpers/categoryTranslations";
 
 const TransactionManager = ({
   type,
@@ -51,10 +34,8 @@ const TransactionManager = ({
     dispatch(deleteTransaction(id));
   };
 
-  const getTranslation = (category, language = "en") => {
-    return categoryTranslations[category]
-      ? categoryTranslations[category][language]
-      : category;
+  const getTranslation = (category) => {
+    return categoryTranslations[category] || category;
   };
 
   if (loading) return <Spinner />;
@@ -96,7 +77,7 @@ const TransactionManager = ({
           </div>
 
           <div className="hidden md:block lg:hidden">
-            <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:mr-10  md:mb-10 md:bg-top md:bg-100% md:h-[142px] md:w-[183px]"></div>
+            <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:mr-10 md:mb-10 md:bg-top md:bg-100% md:h-[142px] md:w-[183px]"></div>
           </div>
         </div>
       )}
