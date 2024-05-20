@@ -3,17 +3,80 @@ import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useMediaQuery } from "react-responsive";
+import { useSelector } from "react-redux";
+import {
+  selectIncomeStats,
+  selectExpenseStats,
+} from "../redux/transactions/selectors";
 
-const BarChart = ({ data }) => {
+const categoryTranslation = {
+  "З/П": "Salary",
+  "Коммуналка и связь": "Utilities and Communication",
+  Транспорт: "Transport",
+  Алкоголь: "Alcohol",
+  Развлечения: "Entertainment",
+  "Доп. доход": "Additional Income",
+  Продукты: "Groceries",
+  Здоровье: "Health",
+  "Техника:": "Equipment",
+};
+
+const descriptionTranslation = {
+  ЗП: "Salary",
+  Коммуналка: "Utilities",
+  Кошти: "Money",
+  " Whiskey": "Whiskey",
+  "Birthday party": "Birthday party",
+};
+
+const BarChart = ({ period, dataType }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
+  const incomeStats = useSelector(selectIncomeStats);
+  const expenseStats = useSelector(selectExpenseStats);
+
+  const filterTransactionsByPeriod = (transactions, period, type) => {
+    const filteredTransactions = transactions.filter((transaction) => {
+      const transactionDate = new Date(transaction.date);
+      const [month, year] = period.split(" ");
+      const periodDate = new Date(
+        year,
+        new Date(Date.parse(month + " 1, 2012")).getMonth(),
+        1
+      );
+      return (
+        transactionDate.getMonth() === periodDate.getMonth() &&
+        transactionDate.getFullYear() === periodDate.getFullYear()
+      );
+    });
+
+    return filteredTransactions.map((transaction) => ({
+      label:
+        descriptionTranslation[transaction.description] ||
+        transaction.description,
+      value: Math.abs(transaction.amount),
+      category:
+        categoryTranslation[transaction.category] || transaction.category,
+    }));
+  };
+
+  const transactions =
+    dataType === "income" ? incomeStats.incomes : expenseStats.expenses;
+  const filteredData = filterTransactionsByPeriod(
+    transactions || [],
+    period,
+    dataType
+  );
 
   const chartData = {
-    labels: data.map((item) => item.label),
+    labels: filteredData.map((item) => `${item.category}`),
     datasets: [
       {
-        label: "Prices",
-        data: data.map((item) => item.value),
-        backgroundColor: ["#FF751D", "#FFDAC0", "#FFDAC0"],
+        label: dataType === "income" ? "Income" : "Expenses",
+        data: filteredData.map((item) => item.value),
+        backgroundColor:
+          dataType === "income"
+            ? ["#4caf50", "#81c784", "#a5d6a7"]
+            : ["#ff5722", "#ff8a65", "#ffab91"],
         borderRadius: 10,
         barThickness: isMobile ? 15 : 30,
         barPercentage: isMobile ? 0.3 : 0.7,
@@ -77,12 +140,8 @@ const BarChart = ({ data }) => {
 };
 
 BarChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
-    })
-  ).isRequired,
+  period: PropTypes.string.isRequired,
+  dataType: PropTypes.string.isRequired,
 };
 
 export default BarChart;

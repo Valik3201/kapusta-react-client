@@ -1,36 +1,16 @@
 import { useState } from "react";
 import Balance from "../../components/Balance";
-import BarChart from "../../components/BarChart";
 import CurrentPeriod from "../../components/CurrentPeriod";
-import Expenses from "../../components/Expenses";
 import ExpensesIncomeBar from "../../components/ExpensesIncomeBar";
 import MainPageBtn from "../../components/MainPageBtn";
-import Income from "../../components/Income";
+import Footer from "../../components/Footer";
+import ExpensesReports from "../../components/ExpensesReports";
+import IncomeReports from "../../components/IncomeReports";
 import SwitchLeft from "../../components/Icons/SwitchLeft";
 import SwitchRight from "../../components/Icons/SwitchRight";
-import Footer from "../../components/Footer";
-
-const expensesData = [
-  { label: "Pork", value: 1000 },
-  { label: "Beef", value: 800 },
-  { label: "Chiken", value: 650 },
-  { label: "Fish", value: 600 },
-  { label: "Panini", value: 400 },
-  { label: "Coffee", value: 390 },
-  { label: "Spaghetti", value: 230 },
-  { label: "Chocolate", value: 200 },
-  { label: "Olives", value: 100 },
-  { label: "Greens", value: 50 },
-];
-
-const incomeData = [
-  { label: "Me", value: 25000 },
-  { label: "My wife", value: 20000 },
-];
 
 const Reports = () => {
   const [dataType, setDataType] = useState("expenses");
-  const [period, setPeriod] = useState("July 2023");
 
   const handleSwitch = () => {
     setDataType((prevType) =>
@@ -40,16 +20,16 @@ const Reports = () => {
 
   return (
     <div className="bg-[#f2f5fc] rounded-bl-[110px] w-full h-72 md:h-[526px]">
-      <div className="p-8 ">
+      <div className="p-8">
         <div className="sm:hidden block">
           <MainPageBtn />
         </div>
-        <div className="container mx-auto gap-8 flex flex-col-reverse justify-between items-center sm:flex-row ">
+        <div className="container mx-auto gap-8 flex flex-col-reverse justify-between items-center sm:flex-row">
           <div className="hidden sm:block">
             <MainPageBtn />
           </div>
           <Balance />
-          <CurrentPeriod period={period} setPeriod={setPeriod} />
+          <CurrentPeriod />
         </div>
         <ExpensesIncomeBar />
         <div className="container mx-auto flex flex-col gap-4 justify-center items-center mt-10 pb-6 sm:pt-3 bg-white rounded-3xl shadow-none sm:shadow-form">
@@ -63,13 +43,9 @@ const Reports = () => {
             </p>
             <SwitchRight />
           </div>
-          {dataType === "expenses" && <Expenses period={period} />}
-          {dataType === "income" && <Income period={period} />}
+          {dataType === "expenses" && <ExpensesReports />}
+          {dataType === "income" && <IncomeReports />}
         </div>
-        <BarChart
-          data={dataType === "expenses" ? expensesData : incomeData}
-          className="z-10"
-        />
         <Footer />
       </div>
     </div>

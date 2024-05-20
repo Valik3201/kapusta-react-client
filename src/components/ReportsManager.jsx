@@ -5,23 +5,24 @@ import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 import SummaryByMonth from "./SummaryByMonth";
 import Spinner from "./Spinner";
+import PropTypes from "prop-types";
 
 const categoryTranslations = {
-  "З/П": { en: "Salary", uk: "Зарплата" },
-  "Коммуналка и связь": {
-    en: "Communal and Communications",
-    uk: "Комуналка і зв'язок",
-  },
-  Транспорт: { en: "Transport", uk: "Транспорт" },
-  Алкоголь: { en: "Alcohol", uk: "Алкоголь" },
-  Развлечения: { en: "Entertainment", uk: "Розваги" },
-  "Доп. доход": { en: "Add Income", uk: "Додатковий дохід" },
-  Здоровье: { en: "Health", uk: "Здоров'я" },
-  Продукты: { en: "Products", uk: "Продукти" },
-  Техника: { en: "Technique", uk: "Техніка" },
-  Образование: { en: "Education", uk: "Освіта" },
-  Хобби: { en: "Hobbies", uk: "Хобі" },
-  Другое: { en: "Other", uk: "Інше" },
+  "З/П": "Salary",
+  "Коммуналка и связь": "Communal and Communications",
+  Транспорт: "Transport",
+  Алкоголь: "Alcohol",
+  Развлечения: "Entertainment",
+  "Доп. доход": "Add Income",
+  Здоровье: "Health",
+  Продукты: "Products",
+  Техника: "Technique",
+  Образование: "Education",
+  Хобби: "Hobbies",
+  " Спорт и хобби": "Sport and hobbies",
+  "Всё для дома": "Everything for home",
+  Прочее: "Other",
+  Другое: "Other",
 };
 
 const TransactionManager = ({
@@ -40,21 +41,27 @@ const TransactionManager = ({
   const stats = useSelector(selectStats);
 
   useEffect(() => {
+    console.log("Categories:", categories);
     dispatch(getStats());
 
-    if (categories.length === 0) {
+    if (categories && categories.length === 0) {
       dispatch(getCategories());
     }
-  }, [dispatch, categories.length, getStats, getCategories]);
+  }, [dispatch, categories, getStats, getCategories]);
 
   const handleDelete = (id) => {
     dispatch(deleteTransaction(id));
   };
 
-  const getTranslation = (category, language = "en") => {
-    return categoryTranslations[category]
-      ? categoryTranslations[category][language]
-      : category;
+  const getTranslation = (category) => {
+    return categoryTranslations[category] || category;
+  };
+
+  const translateTransactions = (transactions) => {
+    return transactions.map((transaction) => ({
+      ...transaction,
+      category: getTranslation(transaction.category),
+    }));
   };
 
   if (loading) return <Spinner />;
@@ -66,7 +73,7 @@ const TransactionManager = ({
         <div className="px-4">
           <TransactionForm
             type={type}
-            categories={categories.map((category) => getTranslation(category))}
+            categories={categories.map(getTranslation)}
             addTransaction={addTransaction}
             getCategories={getCategories}
           />
@@ -75,7 +82,9 @@ const TransactionManager = ({
             <div className="flex gap-[75px] px-8 min-w-full h-full">
               <TransactionList
                 transactions={
-                  type === "expenses" ? stats.expenses : stats.incomes
+                  type === "expenses"
+                    ? translateTransactions(stats.expenses)
+                    : translateTransactions(stats.incomes)
                 }
                 type={type}
                 onDelete={handleDelete}
@@ -102,6 +111,16 @@ const TransactionManager = ({
       )}
     </>
   );
+};
+
+TransactionManager.propTypes = {
+  type: PropTypes.oneOf(["expenses", "incomes", "expenseReports"]).isRequired,
+  getStats: PropTypes.func.isRequired,
+  getCategories: PropTypes.func.isRequired,
+  addTransaction: PropTypes.func.isRequired,
+  deleteTransaction: PropTypes.func.isRequired,
+  selectCategories: PropTypes.func.isRequired,
+  selectStats: PropTypes.func.isRequired,
 };
 
 export default TransactionManager;

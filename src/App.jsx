@@ -12,7 +12,7 @@ const AuthenticationPage = lazy(() =>
   import("./pages/AuthenticationPage/AuthenticationPage")
 );
 const Home = lazy(() => import("./pages/Home/Home"));
-const Reports = lazy(() => import("./pages/Reports/Reports"));
+const Reports = lazy(() => import("./pages/Reports/Reports2"));
 
 const App = () => {
   const dispatch = useDispatch();
