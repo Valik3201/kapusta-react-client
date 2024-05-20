@@ -6,3 +6,14 @@
 .zIndex {
   z-index: -1000 !important;
 }
+
+.categoryIcon:hover path {
+  transition: all 200ms ease-in-out;
+  fill: #ff751d;
+  background-color: #ffdac0 !important;
+}
+
+.categoryIconBg:hover {
+  transition: all 200ms ease-in-out;
+  background: #ffdac0 !important;
+}

@@ -8,6 +8,7 @@ import {
   getIncomeCategories,
   getExpenseCategories,
   updateUserBalance,
+  getPeriodData,
 } from "./operations";
 import { refreshUser } from "../auth/operations";
 
@@ -17,7 +18,7 @@ const initialState = {
   expenseStats: {},
   incomeCategories: [],
   expenseCategories: [],
-  period: null,
+  periodData: null,
   loading: false,
   error: null,
 };
@@ -149,7 +150,7 @@ const transactionsSlice = createSlice({
         if (action.payload && action.payload.balance !== undefined) {
           state.balance = action.payload.balance;
         } else {
-          state.balance = 0; // Или любое значение по умолчанию
+          state.balance = 0;
         }
       })
       .addCase(refreshUser.rejected, (state, action) => {
@@ -166,6 +167,19 @@ const transactionsSlice = createSlice({
         state.balance = action.payload.newBalance;
       })
       .addCase(updateUserBalance.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      // Get Period Data
+      .addCase(getPeriodData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getPeriodData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.periodData = action.payload;
+      })
+      .addCase(getPeriodData.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

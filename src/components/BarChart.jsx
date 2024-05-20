@@ -1,13 +1,14 @@
 import PropTypes from "prop-types";
 import { Bar } from "react-chartjs-2";
-import "chart.js/auto";
-import ChartDataLabels from "chartjs-plugin-datalabels";
 import { useMediaQuery } from "react-responsive";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import "chart.js/auto";
 import { useSelector } from "react-redux";
 import {
   selectIncomeStats,
   selectExpenseStats,
 } from "../redux/transactions/selectors";
+import categoryTranslations from "../helpers/categoryTranslations";
 
 const categoryTranslation = {
   "З/П": "Salary",
@@ -122,7 +123,7 @@ const BarChart = ({ period, dataType }) => {
         anchor: isMobile ? "end" : "end",
         align: isMobile ? "end" : "end",
         formatter: (value) => {
-          return ` ${value} HUA`;
+          return ` ${value} UAH`;
         },
         color: "#52555F",
         font: {

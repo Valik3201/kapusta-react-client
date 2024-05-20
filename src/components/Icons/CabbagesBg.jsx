@@ -1,7 +1,6 @@
 const CabbagesBg = () => {
   return (
     <svg
-      width="100%"
       height="272px "
       viewBox="0 0 1270 227"
       fill="none"
