@@ -117,8 +117,8 @@ const ReportsManager = ({
 
   return (
     <>
-      <div className="block sm:hidden">
-        <div className="space-y-4">
+      <div className="hidden sm:block">
+        <div className="flex flex-wrap gap-4 px-16 align-center justify-center">
           {categoriesToRender.map(({ name, Icon, category2 }) =>
             renderCategoryCard(
               categoryAmounts[name] || 0,
@@ -130,8 +130,8 @@ const ReportsManager = ({
         </div>
       </div>
 
-      <div className="hidden sm:block">
-        <div className="flex flex-wrap items-start justify-center pb-2 pt-2 gap-5">
+      <div className="block sm:hidden">
+        <div className="grid grid-cols-3 py-2 gap-5">
           {categoriesToRender.map(({ name, Icon, category2 }) =>
             renderCategoryCard(
               categoryAmounts[name] || 0,
