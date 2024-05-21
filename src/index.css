@@ -17,3 +17,16 @@
   transition: all 200ms ease-in-out;
   background: #ffdac0 !important;
 }
+
+.relative:hover .tooltip-content {
+  opacity: 1;
+}
+
+.tooltip-content {
+  display: block;
+  z-index: 1000;
+}
+
+.relative:hover .tooltip-content {
+  display: block;
+}
