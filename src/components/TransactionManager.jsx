@@ -63,7 +63,7 @@ const TransactionManager = ({
               />
 
               <div className="hidden lg:block w-1/5 text-xs">
-                <SummaryByMonth monthStats={stats.monthsStats} />
+                <SummaryByMonth monthStats={stats.monthStats} />
               </div>
             </div>
           )}
@@ -73,7 +73,7 @@ const TransactionManager = ({
       {stats && (
         <div className="justify-between items-end hidden md:flex lg:hidden">
           <div className="w-[230px] text-xs mt-10 pb-10">
-            <SummaryByMonth monthStats={stats.monthsStats} />
+            <SummaryByMonth monthStats={stats.monthStats} />
           </div>
 
           <div>
