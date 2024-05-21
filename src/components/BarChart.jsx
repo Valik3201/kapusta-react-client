@@ -10,32 +10,12 @@ import {
 } from "../redux/transactions/selectors";
 import categoryTranslations from "../helpers/categoryTranslations";
 
-const categoryTranslation = {
-  "З/П": "Salary",
-  "Коммуналка и связь": "Utilities and Communication",
-  Транспорт: "Transport",
-  Алкоголь: "Alcohol",
-  Развлечения: "Entertainment",
-  "Доп. доход": "Additional Income",
-  Продукты: "Groceries",
-  Здоровье: "Health",
-  "Техника:": "Equipment",
-};
-
-const descriptionTranslation = {
-  ЗП: "Salary",
-  Коммуналка: "Utilities",
-  Кошти: "Money",
-  " Whiskey": "Whiskey",
-  "Birthday party": "Birthday party",
-};
-
 const BarChart = ({ period, dataType }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const incomeStats = useSelector(selectIncomeStats);
   const expenseStats = useSelector(selectExpenseStats);
 
-  const filterTransactionsByPeriod = (transactions, period, type) => {
+  const filterTransactionsByPeriod = (transactions, period) => {
     const filteredTransactions = transactions.filter((transaction) => {
       const transactionDate = new Date(transaction.date);
       const [month, year] = period.split(" ");
@@ -50,34 +30,31 @@ const BarChart = ({ period, dataType }) => {
       );
     });
 
-    return filteredTransactions.map((transaction) => ({
-      label:
-        descriptionTranslation[transaction.description] ||
-        transaction.description,
-      value: Math.abs(transaction.amount),
-      category:
-        categoryTranslation[transaction.category] || transaction.category,
-    }));
+    const aggregatedData = filteredTransactions.reduce((acc, transaction) => {
+      const category =
+        categoryTranslations[transaction.category] || transaction.category;
+      const value = Math.abs(transaction.amount);
+      if (!acc[category]) {
+        acc[category] = { label: category, value: 0 };
+      }
+      acc[category].value += value;
+      return acc;
+    }, {});
+
+    return Object.values(aggregatedData);
   };
 
   const transactions =
     dataType === "income" ? incomeStats.incomes : expenseStats.expenses;
-  const filteredData = filterTransactionsByPeriod(
-    transactions || [],
-    period,
-    dataType
-  );
+  const filteredData = filterTransactionsByPeriod(transactions || [], period);
 
   const chartData = {
-    labels: filteredData.map((item) => `${item.category}`),
+    labels: filteredData.map((item) => item.label),
     datasets: [
       {
         label: dataType === "income" ? "Income" : "Expenses",
         data: filteredData.map((item) => item.value),
-        backgroundColor:
-          dataType === "income"
-            ? ["#4caf50", "#81c784", "#a5d6a7"]
-            : ["#ff5722", "#ff8a65", "#ffab91"],
+        backgroundColor: ["#ff5722", "#ff8a65", "#ffab91"],
         borderRadius: 10,
         barThickness: isMobile ? 15 : 30,
         barPercentage: isMobile ? 0.3 : 0.7,
@@ -122,9 +99,7 @@ const BarChart = ({ period, dataType }) => {
       datalabels: {
         anchor: isMobile ? "end" : "end",
         align: isMobile ? "end" : "end",
-        formatter: (value) => {
-          return ` ${value} UAH`;
-        },
+        formatter: (value) => `${value} UAH`,
         color: "#52555F",
         font: {
           size: isMobile ? 10 : 12,
