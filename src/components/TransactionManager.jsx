@@ -5,6 +5,7 @@ import TransactionForm from "./TransactionForm";
 import TransactionList from "./TransactionList";
 import SummaryByMonth from "./SummaryByMonth";
 import Spinner from "./Spinner";
+import categoryTranslations from "../helpers/categoryTranslations";
 
 const TransactionManager = ({
   type,
@@ -33,6 +34,10 @@ const TransactionManager = ({
     dispatch(deleteTransaction(id));
   };
 
+  const getTranslation = (category) => {
+    return categoryTranslations[category] || category;
+  };
+
   if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
 
@@ -42,7 +47,7 @@ const TransactionManager = ({
         <div className="px-4">
           <TransactionForm
             type={type}
-            categories={categories}
+            categories={categories.map((category) => getTranslation(category))}
             addTransaction={addTransaction}
             getCategories={getCategories}
           />

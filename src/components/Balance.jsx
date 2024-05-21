@@ -26,6 +26,7 @@ const Balance = () => {
     <div className="flex flex-col md:flex-row gap-4 justify-between lg:justify-center items-center lg:mx-auto w-full md:w-fit px-4 md:px-0">
       <p className="font-medium text-gray-darkest/70">Balance:</p>
 
+
       <div className="flex md:gap-4 min-w-full">
         <Tooltip
           message1="Hello! To get started, enter the current balance of your account!"
@@ -39,6 +40,7 @@ const Balance = () => {
             className="w-full md:w-32 bg-transparent border-4 border-r-0 md:border-r-4 rounded-l-full md:rounded-2xl p-4 text-center border-white text-black font-bold"
           />
         </Tooltip>
+
 
         <button
           onClick={handleConfirm}
