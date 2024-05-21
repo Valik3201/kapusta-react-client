@@ -97,6 +97,18 @@ export const getPeriodData = createAsyncThunk(
   }
 );
 
+export const getUserInfo = createAsyncThunk(
+  "user/getUserInfo",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get("/user");
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const updateUserBalance = createAsyncThunk(
   "user/updateBalance",
   async (newBalance, { rejectWithValue }) => {
