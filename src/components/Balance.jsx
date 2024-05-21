@@ -1,21 +1,28 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectBalance } from "../redux/transactions/selectors";
-import { updateUserBalance } from "../redux/transactions/operations";
+import {
+  updateUserBalance,
+  getUserInfo,
+} from "../redux/transactions/operations";
 import Tooltip from "./Tooltip";
 
 const Balance = () => {
   const dispatch = useDispatch();
   const balance = Number(useSelector(selectBalance)).toFixed(2);
 
-  const [inputBalance, setInputBalance] = useState(balance);
+  const [inputBalance, setInputBalance] = useState(Number(balance));
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, [dispatch]);
 
   useEffect(() => {
     setInputBalance(balance);
   }, [balance]);
 
   const handleChange = (e) => {
-    setInputBalance(e.target.value);
+    setInputBalance(Number(e.target.value).toFixed(2));
   };
 
   const handleConfirm = () => {
