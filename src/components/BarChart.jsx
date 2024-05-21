@@ -14,7 +14,6 @@ const BarChart = ({ period, dataType }) => {
   const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   const incomeStats = useSelector(selectIncomeStats);
   const expenseStats = useSelector(selectExpenseStats);
-  let delayed;
 
   const filterTransactionsByPeriod = (transactions, period) => {
     const filteredTransactions = transactions.filter((transaction) => {
@@ -50,97 +49,60 @@ const BarChart = ({ period, dataType }) => {
   const filteredData = filterTransactionsByPeriod(transactions || [], period);
 
   const chartData = {
-    labels: filteredData.map((item) =>
-      item.label.length > 15 ? `${item.label.slice(0, 11)}...` : item.label
-    ),
+    labels: filteredData.map((item) => item.label),
     datasets: [
       {
-        label: "",
+        label: dataType === "income" ? "Income" : "Expenses",
         data: filteredData.map((item) => item.value),
-        backgroundColor: ["#FF751D", "#FFDAC0"],
+        backgroundColor: ["#ff5722", "#ff8a65", "#ffab91"],
         borderRadius: 10,
-        borderWidth: 1,
-        barThickness: isMobile ? "18" : "38",
-        barPercentage: 0.5,
-        categoryPercentage: 0.8,
+        barThickness: isMobile ? 15 : 30,
+        barPercentage: isMobile ? 0.3 : 0.7,
+        categoryPercentage: isMobile ? 0.4 : 0.8,
       },
     ],
   };
 
   const options = {
-    maintainAspectRatio: false,
-    animation: {
-      onComplete: () => {
-        delayed = true;
-      },
-      delay: (context) => {
-        let delay = 20;
-        if (context.type === "data" && context.mode === "default" && !delayed) {
-          delay = context.dataIndex * 900 + context.datasetIndex * 2000;
-        }
-        return delay;
+    type: "bar",
+    indexAxis: isMobile ? "y" : "x",
+    layout: {
+      padding: {
+        left: isMobile ? 40 : 20,
+        right: isMobile ? 100 : 20,
+        top: isMobile ? 0 : 40,
+        bottom: isMobile ? 0 : 20,
       },
     },
-    responsive: true,
-    indexAxis: isMobile ? "y" : "x",
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          display: !isMobile,
+        },
+      },
+      y: {
+        grid: {
+          display: !isMobile,
+        },
+        ticks: {
+          display: isMobile,
+        },
+      },
+    },
     plugins: {
       legend: {
         display: false,
       },
       datalabels: {
-        align: !isMobile ? "100" : "end",
-        anchor: "end",
-        offset: !isMobile ? "8" : "",
-        font: {
-          size: 10,
-        },
-        clamp: false,
+        anchor: isMobile ? "end" : "end",
+        align: isMobile ? "end" : "end",
         formatter: (value) => `${value} UAH`,
-      },
-    },
-    scales: {
-      x: {
-        suggestedMax:
-          Math.max(...filteredData.map((item) => item.value)) * 1.04,
-        stacked: true,
-        border: {
-          display: false,
-        },
-        grid: {
-          drawOnChartArea: false,
-          drawTicks: false,
-        },
-        ticks: {
-          LayoutPosition: "top",
-          beginAtZero: true,
-          display: !isMobile,
-          font: {
-            size: 10,
-          },
-        },
-      },
-      y: {
-        suggestedMax:
-          Math.max(...filteredData.map((item) => item.value)) * 1.04,
-        stacked: true,
-        border: {
-          display: false,
-        },
-        grid: {
-          drawOnChartArea: true,
-          display: isMobile,
-          drawBorder: false,
-        },
-        ticks: {
-          LayoutPosition: "left",
-          display: isMobile,
-          font: {
-            size: 10,
-          },
-          labelOffset: -12,
-          mirror: true,
-          align: "end",
-          padding: 0,
+        color: "#52555F",
+        font: {
+          size: isMobile ? 10 : 12,
         },
       },
     },
