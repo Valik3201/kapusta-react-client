@@ -10,10 +10,12 @@ import SwitchLeft from "../../components/Icons/SwitchLeft";
 import SwitchRight from "../../components/Icons/SwitchRight";
 import { getCurrentPeriod } from "../../helpers/getCurrentPeriod";
 import BarChart from "../../components/BarChart";
+import { useMediaQuery } from "react-responsive";
 
 const Reports = () => {
   const [dataType, setDataType] = useState("expenses");
   const [period, setPeriod] = useState(getCurrentPeriod());
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
 
   useEffect(() => {
     setPeriod(getCurrentPeriod());
@@ -54,7 +56,8 @@ const Reports = () => {
           {dataType === "income" && <IncomeReports period={period} />}
         </div>
         <BarChart period={period} dataType={dataType} />
-        <Footer />
+
+        {!isMobile && <Footer />}
       </div>
     </div>
   );

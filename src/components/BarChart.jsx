@@ -110,7 +110,13 @@ const BarChart = ({ period, dataType }) => {
 
   return (
     <div className="container mx-auto flex flex-col gap-4 justify-center items-center sm:mt-10 sm:py-14 p-2 md:p-8 lg:px-32 bg-white rounded-3xl shadow-none sm:shadow-form h-full">
-      <Bar data={chartData} options={options} plugins={[ChartDataLabels]} />
+      {filteredData.length > 0 ? (
+        <Bar data={chartData} options={options} plugins={[ChartDataLabels]} />
+      ) : (
+        <div className="text-center py-8 text-gray-500">
+          No data for that period!
+        </div>
+      )}
     </div>
   );
 };
