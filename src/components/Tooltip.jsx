@@ -4,7 +4,7 @@ const Tooltip = ({ message1, message2, children }) => {
   return (
     <div className="relative flex flex-col items-center group">
       {children}
-      <div className="absolute left-200 top-full left-1 mt-2 flex flex-col items-center hidden group-hover:flex">
+      <div className="absolute left-200 top-full left-1 mt-2 flex-col items-center hidden group-hover:flex">
         <span className="relative z-10000 w-72 h-40 p-8 text-white whitespace-pre-wrap bg-gradient-to-br from-blue-800 to-blue-950 shadow-lg rounded-3xl">
           <div
             style={{
