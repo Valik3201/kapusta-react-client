@@ -15,7 +15,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="md:pb-10">
+          <div className="md:pb-10 animate-bounce">
             <div className="md:bg-desktop-cabbages-2 md:bg-no-repeat md:bg-top md:ml-24 lg:ml-56 md:-mt-10 lg:-mt-16 md:bg-100% md:h-[142px] md:w-[183px]"></div>
           </div>
 

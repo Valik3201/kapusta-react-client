@@ -42,7 +42,7 @@ const Home = () => {
       </div>
 
       <div className="md:mt-14 lg:mt-2 container mx-auto w-full md:w-[704px] lg:w-[1098px]">
-        <nav className="fixed md:relative bottom-0 grid grid-cols-2 w-full md:block">
+        <nav className="fixed md:relative bottom-0 left-0 grid grid-cols-2 w-full md:block">
           <button
             onClick={() => setActiveTab("expenses")}
             className={`md:w-36 uppercase font-bold text-center py-4 md:rounded-t-3xl ${
