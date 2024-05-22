@@ -1,9 +1,13 @@
-import Trash from "./Icons/Trash";
+import Modal from "./Modal";
 
 const TransactionList = ({ transactions, type, onDelete }) => {
   const sortedTransactions = transactions?.slice().sort((a, b) => {
     return new Date(b.date) - new Date(a.date);
   });
+
+  const handleDelete = (id) => {
+    onDelete(id);
+  };
 
   return (
     <>
@@ -44,13 +48,11 @@ const TransactionList = ({ transactions, type, onDelete }) => {
                       {transaction.amount.toFixed(2)} UAH
                     </td>
                     <td className="border-gray-light-2 border-b-2 text-center">
-                      <button
-                        onClick={() => onDelete(transaction._id)}
-                        className="hover:bg-gray-light-2 rounded-full p-2 transition duration-200 ease-in-out"
-                      >
-                        <Trash />
-                        <span className="sr-only">Delete</span>
-                      </button>
+                      <Modal
+                        type={"confirm"}
+                        handleConfirm={() => handleDelete(transaction._id)}
+                        message={"Are you sure?"}
+                      />
                     </td>
                   </tr>
                 ))}
@@ -84,13 +86,11 @@ const TransactionList = ({ transactions, type, onDelete }) => {
                 </div>
               </div>
               <div className="w-[10%]">
-                <button
-                  onClick={() => onDelete(transaction._id)}
-                  className="hover:bg-gray-light-2 rounded-full p-2 transition duration-200 ease-in-out"
-                >
-                  <Trash />
-                  <span className="sr-only">Delete</span>
-                </button>
+                <Modal
+                  type={"confirm"}
+                  handleConfirm={() => handleDelete(transaction._id)}
+                  message={"Are you sure?"}
+                />
               </div>
             </div>
           ))}
