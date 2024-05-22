@@ -2,7 +2,6 @@ import { useState } from "react";
 import googleLogo from "../../assets/google-logo.svg";
 import { useDispatch } from "react-redux";
 import { logIn, register } from "../../redux/auth/operations";
-import { useAuth } from "../../hooks";
 
 const InputWithValidation = ({
   value,

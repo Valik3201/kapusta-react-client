@@ -1,9 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// axios.defaults.baseURL = "https://kapusta-backend.goit.global";
-
-axios.defaults.baseURL = "https://kapusta-nodejs-server.onrender.com/api";
+axios.defaults.baseURL = import.meta.env.VITE_API_URL;
 
 // Utility to add JWT
 const setAuthHeader = (token) => {

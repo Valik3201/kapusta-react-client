@@ -7,6 +7,7 @@ import { useAuth } from "./hooks";
 import Layout from "./components/Layout";
 import RestrictedRoute from "./components/RestrictedRoute";
 import PrivateRoute from "./components/PrivateRoute";
+import Spinner from "./components/Spinner";
 
 const AuthenticationPage = lazy(() =>
   import("./pages/AuthenticationPage/AuthenticationPage")
@@ -23,7 +24,7 @@ const App = () => {
   }, [dispatch]);
 
   return isRefreshing ? (
-    <div>Loading...</div>
+    <Spinner />
   ) : (
     <Routes>
       <Route path="/" element={<Layout />}>
