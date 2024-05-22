@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import CategoryCard from "./CategoryCard";
-//import Spinner from "./Spinner";
-import { selectError } from "../redux/transactions/selectors";
+import Spinner from "./Spinner";
+import { selectError, selectLoading } from "../redux/transactions/selectors";
 // category icons
 import Alcohol from "./Icons/CategoriesIcons/Alcohol";
 import Products from "./Icons/CategoriesIcons/Products";
@@ -18,7 +18,6 @@ import Hobbies from "./Icons/CategoriesIcons/Hobbies";
 import Communal from "./Icons/CategoriesIcons/Communal";
 import AddIncome from "./Icons/CategoriesIcons/AddIncome";
 import Salary from "./Icons/CategoriesIcons/Salary";
-import categoryTranslations from "../helpers/categoryTranslations";
 import monthNames from "../helpers/monthNames";
 
 const ReportsManager = ({
@@ -30,7 +29,7 @@ const ReportsManager = ({
   selectStats,
 }) => {
   const dispatch = useDispatch();
-  //const loading = useSelector(selectLoading);
+  const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const categories = useSelector(selectCategories);
   const stats = useSelector(selectStats);
@@ -63,28 +62,41 @@ const ReportsManager = ({
 
   useEffect(() => {
     const amounts = transactions.reduce((acc, { category, amount }) => {
-      const translatedCategory = categoryTranslations[category] || category;
-      if (!acc[translatedCategory]) {
-        acc[translatedCategory] = 0;
+      if (!acc[category]) {
+        acc[category] = 0;
       }
-      acc[translatedCategory] += amount;
+      acc[category] += amount;
       return acc;
     }, {});
 
     setCategoryAmounts(amounts);
   }, [transactions]);
 
-  const renderCategoryCard = (amount, Icon, category1, category2 = null) => (
-    <CategoryCard
-      key={category1}
-      amount={amount.toFixed(2)}
-      Icon={Icon}
-      category1={category1}
-      category2={category2}
-    />
-  );
+  const renderCategoryCard = (amount, Icon, name) => {
+    let category1, category2;
 
-  //if (loading) return <Spinner />;
+    if (name === "Communal and Communications") {
+      category1 = "Communal and";
+      category2 = "Communications";
+    } else {
+      [category1, category2] = name.split(" ");
+    }
+    if (amount !== 0) {
+      return (
+        <CategoryCard
+          key={name}
+          amount={amount.toFixed(2)}
+          Icon={Icon}
+          category1={category1}
+          category2={category2}
+        />
+      );
+    } else {
+      return null;
+    }
+  };
+
+  if (loading) return <Spinner />;
   if (error) return <div>Error: {error}</div>;
 
   const expenseCategories = [
@@ -96,11 +108,10 @@ const ReportsManager = ({
     { name: "Housing", Icon: Housing },
     { name: "Technique", Icon: Technique },
     {
-      name: "Communal and ",
+      name: "Communal and Communications",
       Icon: Communal,
-      category2: "Communications",
     },
-    { name: "Hobbies", Icon: Hobbies, category2: "Sports" },
+    { name: "Hobbies Sports", Icon: Hobbies },
     { name: "Education", Icon: Education },
     { name: "Other", Icon: Other },
   ];
