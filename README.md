@@ -21,6 +21,9 @@ Kapusta provides a user-friendly interface where users can:
 - **Secure Authentication:** Log in securely to access personalized financial data.
 - **Responsive Design:** Enjoy seamless user experience across various devices.
 
+> [!NOTE]  
+> Please be aware that the server responses may experience delays of 50 seconds or more due to inactivity.
+
 [![screenshot](https://github.com/Valik3201/kapusta-react-client/blob/main/assets/screenshot-2.png)](https://github.com/Valik3201/kapusta-react-client/blob/main/assets/screenshot-2.png)
 
 ### Backend Repository
