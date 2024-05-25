@@ -49,11 +49,9 @@ export const logIn = createAsyncThunk(
       return res.data;
     } catch (error) {
       if (error.response.status === 403) {
-        return thunkAPI.rejectWithValue(
-          "Email doesn't exist / Password is wrong"
-        );
+        return thunkAPI.rejectWithValue("Email or password is wrong");
       } else {
-        return thunkAPI.rejectWithValue(error.message);
+        return thunkAPI.rejectWithValue(error);
       }
     }
   }

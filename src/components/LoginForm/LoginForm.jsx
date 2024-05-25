@@ -2,6 +2,8 @@ import { useState } from "react";
 import googleLogo from "../../assets/google-logo.svg";
 import { useDispatch } from "react-redux";
 import { logIn, register } from "../../redux/auth/operations";
+import { useSelector } from "react-redux";
+import { selectError } from "../../redux/auth/selectors";
 
 const InputWithValidation = ({
   value,
@@ -37,6 +39,7 @@ const InputWithValidation = ({
 
 const LoginForm = () => {
   const dispatch = useDispatch();
+  const error = useSelector(selectError);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -132,6 +135,8 @@ const LoginForm = () => {
             Registration
           </button>
         </div>
+
+        {error && <p className="text-red text-xs pt-4">{error}</p>}
       </form>
     </div>
   );
